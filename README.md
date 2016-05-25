@@ -16,7 +16,9 @@ This a web app, a team course project in SYSU.
 
 # Run
 
-run following command under mysite file
+Please set up PostgreSQL according to `DATABASES` in `settings.py` and import database correctly.
+
+Then run the following command under `mysite` file
 
 ```
 ./manage.py runserver
@@ -26,3 +28,7 @@ visit `localhost:8000` to see the local website.
 
 visit `localhost:8000/admin` to manage the website as super user.
 
+```
+usename: peter
+password: teambuilder
+```
