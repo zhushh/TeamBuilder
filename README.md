@@ -2,7 +2,7 @@
 
 ---
 
-<p align="center"><img src="/doc/img/logo.png" alt="team-builder"/></p>
+<p align="center"><img src="/doc/img/logo.png" alt="team-builder_logo"/></p>
 
 # Introduction
 
@@ -15,9 +15,11 @@ This a web app, a team course project in SYSU.
 
 # Run
 
+run following command under mysite file
+
 ```
 ./manage.py runserver
 ```
 
-Visit `localhost:8000` to see the local website.
+visit `localhost:8000` to see the local website.
 
