@@ -11,7 +11,8 @@ This a web app, a team course project in SYSU.
 # Requirement
 
 - python3
-- django1.9
+- django 1.96
+- PostgreSQL 9.5
 
 # Run
 
@@ -22,4 +23,6 @@ run following command under mysite file
 ```
 
 visit `localhost:8000` to see the local website.
+
+visit `localhost:8000/admin` to manage the website as super user.
 
