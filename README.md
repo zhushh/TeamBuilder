@@ -18,7 +18,7 @@ This a web app, a team course project in SYSU.
 
 Please set up PostgreSQL according to `DATABASES` in `settings.py` and import database correctly.
 
-Then run the following command under `mysite` file
+Then run the following command under `./mysite` directory. 
 
 ```
 ./manage.py runserver

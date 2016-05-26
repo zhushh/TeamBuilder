@@ -368,6 +368,41 @@ CREATE TABLE django_session (
 ALTER TABLE django_session OWNER TO postgres;
 
 --
+-- Name: teamBuilder_comment; Type: TABLE; Schema: public; Owner: dbuser
+--
+
+CREATE TABLE "teamBuilder_comment" (
+    id integer NOT NULL,
+    content character varying(50) NOT NULL,
+    "time" timestamp with time zone NOT NULL,
+    marker_id integer
+);
+
+
+ALTER TABLE "teamBuilder_comment" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: dbuser
+--
+
+CREATE SEQUENCE "teamBuilder_comment_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "teamBuilder_comment_id_seq" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: dbuser
+--
+
+ALTER SEQUENCE "teamBuilder_comment_id_seq" OWNED BY "teamBuilder_comment".id;
+
+
+--
 -- Name: teamBuilder_profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -380,11 +415,47 @@ CREATE TABLE "teamBuilder_profile" (
     description text NOT NULL,
     user_id integer NOT NULL,
     role character varying(20),
-    grade character varying(20) NOT NULL
+    grade character varying(20) NOT NULL,
+    department character varying(20) NOT NULL,
+    tags character varying(20)[]
 );
 
 
 ALTER TABLE "teamBuilder_profile" OWNER TO postgres;
+
+--
+-- Name: teamBuilder_profile_commentList; Type: TABLE; Schema: public; Owner: dbuser
+--
+
+CREATE TABLE "teamBuilder_profile_commentList" (
+    id integer NOT NULL,
+    profile_id integer NOT NULL,
+    comment_id integer NOT NULL
+);
+
+
+ALTER TABLE "teamBuilder_profile_commentList" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_profile_commentList_id_seq; Type: SEQUENCE; Schema: public; Owner: dbuser
+--
+
+CREATE SEQUENCE "teamBuilder_profile_commentList_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "teamBuilder_profile_commentList_id_seq" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_profile_commentList_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: dbuser
+--
+
+ALTER SEQUENCE "teamBuilder_profile_commentList_id_seq" OWNED BY "teamBuilder_profile_commentList".id;
+
 
 --
 -- Name: teamBuilder_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -443,6 +514,45 @@ ALTER SEQUENCE "teamBuilder_project_id_seq" OWNED BY "teamBuilder_project".id;
 
 
 --
+-- Name: teamBuilder_restriction; Type: TABLE; Schema: public; Owner: dbuser
+--
+
+CREATE TABLE "teamBuilder_restriction" (
+    id integer NOT NULL,
+    school character varying(20) NOT NULL,
+    department character varying(20) NOT NULL,
+    major character varying(20) NOT NULL,
+    min_num integer,
+    max_num integer,
+    CONSTRAINT "teamBuilder_restriction_max_num_check" CHECK ((max_num >= 0)),
+    CONSTRAINT "teamBuilder_restriction_min_num_check" CHECK ((min_num >= 0))
+);
+
+
+ALTER TABLE "teamBuilder_restriction" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_restriction_id_seq; Type: SEQUENCE; Schema: public; Owner: dbuser
+--
+
+CREATE SEQUENCE "teamBuilder_restriction_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "teamBuilder_restriction_id_seq" OWNER TO dbuser;
+
+--
+-- Name: teamBuilder_restriction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: dbuser
+--
+
+ALTER SEQUENCE "teamBuilder_restriction_id_seq" OWNED BY "teamBuilder_restriction".id;
+
+
+--
 -- Name: teamBuilder_team; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -452,7 +562,8 @@ CREATE TABLE "teamBuilder_team" (
     captain_id integer,
     tags character varying(20)[],
     is_confirmed boolean NOT NULL,
-    project_id integer
+    project_id integer,
+    description text NOT NULL
 );
 
 
@@ -480,23 +591,23 @@ ALTER SEQUENCE "teamBuilder_team_id_seq" OWNED BY "teamBuilder_team".id;
 
 
 --
--- Name: teamBuilder_team_members; Type: TABLE; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList; Type: TABLE; Schema: public; Owner: dbuser
 --
 
-CREATE TABLE "teamBuilder_team_members" (
+CREATE TABLE "teamBuilder_team_memberList" (
     id integer NOT NULL,
     team_id integer NOT NULL,
     user_id integer NOT NULL
 );
 
 
-ALTER TABLE "teamBuilder_team_members" OWNER TO postgres;
+ALTER TABLE "teamBuilder_team_memberList" OWNER TO dbuser;
 
 --
--- Name: teamBuilder_team_members_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_id_seq; Type: SEQUENCE; Schema: public; Owner: dbuser
 --
 
-CREATE SEQUENCE "teamBuilder_team_members_id_seq"
+CREATE SEQUENCE "teamBuilder_team_memberList_id_seq"
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -504,13 +615,13 @@ CREATE SEQUENCE "teamBuilder_team_members_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "teamBuilder_team_members_id_seq" OWNER TO postgres;
+ALTER TABLE "teamBuilder_team_memberList_id_seq" OWNER TO dbuser;
 
 --
--- Name: teamBuilder_team_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: dbuser
 --
 
-ALTER SEQUENCE "teamBuilder_team_members_id_seq" OWNED BY "teamBuilder_team_members".id;
+ALTER SEQUENCE "teamBuilder_team_memberList_id_seq" OWNED BY "teamBuilder_team_memberList".id;
 
 
 --
@@ -577,10 +688,24 @@ ALTER TABLE ONLY django_migrations ALTER COLUMN id SET DEFAULT nextval('django_m
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_comment" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_comment_id_seq"'::regclass);
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY "teamBuilder_profile" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_profile_id_seq"'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_profile_commentList" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_profile_commentList_id_seq"'::regclass);
 
 
 --
@@ -591,6 +716,13 @@ ALTER TABLE ONLY "teamBuilder_project" ALTER COLUMN id SET DEFAULT nextval('"tea
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_restriction" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_restriction_id_seq"'::regclass);
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -598,10 +730,10 @@ ALTER TABLE ONLY "teamBuilder_team" ALTER COLUMN id SET DEFAULT nextval('"teamBu
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: dbuser
 --
 
-ALTER TABLE ONLY "teamBuilder_team_members" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_team_members_id_seq"'::regclass);
+ALTER TABLE ONLY "teamBuilder_team_memberList" ALTER COLUMN id SET DEFAULT nextval('"teamBuilder_team_memberList_id_seq"'::regclass);
 
 
 --
@@ -666,6 +798,12 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 25	Can add project	9	add_project
 26	Can change project	9	change_project
 27	Can delete project	9	delete_project
+28	Can add comment	10	add_comment
+29	Can change comment	10	change_comment
+30	Can delete comment	10	delete_comment
+31	Can add restriction	11	add_restriction
+32	Can change restriction	11	change_restriction
+33	Can delete restriction	11	delete_restriction
 \.
 
 
@@ -673,7 +811,7 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('auth_permission_id_seq', 27, true);
+SELECT pg_catalog.setval('auth_permission_id_seq', 33, true);
 
 
 --
@@ -681,11 +819,14 @@ SELECT pg_catalog.setval('auth_permission_id_seq', 27, true);
 --
 
 COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-2	pbkdf2_sha256$24000$lK0XLhrvqaxE$1XFBGTV3BHeMva2oRg5q9E8diYpN764Pp37NLSrqXrY=	\N	f	user001				f	t	2016-05-25 16:17:32.795797+08
-3	pbkdf2_sha256$24000$5uTtiYNPlFzA$ii86FmOd3n2GEQObfBrdOvL7zGMC8QvCoi7AIMrZqqk=	\N	f	user002				f	t	2016-05-25 16:17:43.923598+08
-4	pbkdf2_sha256$24000$whUQIor4AGjQ$ozxR2y6tBloXXWg8n6oC1B3siYKVjdWwoHCA0UADQ7s=	\N	f	user003				f	t	2016-05-25 16:17:55.900819+08
-5	pbkdf2_sha256$24000$Ks72qJR1or96$/mVVh5GY5FJjCSm0WVP1Qk3ZUz4lYyQAxwzZPsfnkzU=	\N	f	user004				f	t	2016-05-25 16:18:09.527907+08
-1	pbkdf2_sha256$24000$9ZW6GnSrlpd2$jpdWMx1S67kn6jyK8EaAA44ZjhI7TJR/R+pymd0p/IY=	2016-05-25 17:30:09.795324+08	t	peter			sptzxbbb@gmail.com	t	t	2016-05-25 16:16:04.873118+08
+1	pbkdf2_sha256$24000$9ZW6GnSrlpd2$jpdWMx1S67kn6jyK8EaAA44ZjhI7TJR/R+pymd0p/IY=	2016-05-26 17:06:16+08	t	peter			sptzxbbb@gmail.com	t	t	2016-05-25 16:16:04+08
+2	pbkdf2_sha256$24000$lK0XLhrvqaxE$1XFBGTV3BHeMva2oRg5q9E8diYpN764Pp37NLSrqXrY=	\N	f	user001				f	t	2016-05-25 16:17:32+08
+9	pbkdf2_sha256$24000$36Eap7ip1bla$5Mi7RgXrD0mJMp6IkIGnrjSvgmyCyfySRJJBKpyfkNw=	\N	f	user007				f	t	2016-05-26 18:21:00+08
+3	pbkdf2_sha256$24000$5uTtiYNPlFzA$ii86FmOd3n2GEQObfBrdOvL7zGMC8QvCoi7AIMrZqqk=	\N	f	user002				f	t	2016-05-25 16:17:43+08
+4	pbkdf2_sha256$24000$whUQIor4AGjQ$ozxR2y6tBloXXWg8n6oC1B3siYKVjdWwoHCA0UADQ7s=	\N	f	user003				f	t	2016-05-25 16:17:55+08
+5	pbkdf2_sha256$24000$Ks72qJR1or96$/mVVh5GY5FJjCSm0WVP1Qk3ZUz4lYyQAxwzZPsfnkzU=	\N	f	user004				f	t	2016-05-25 16:18:09+08
+6	pbkdf2_sha256$24000$Rt0pacwo98Ly$MYiykkIZPVEU7H7rcVbe7rO49uhoCeMbNrC55dmpJwc=	\N	f	user005				f	t	2016-05-26 18:20:42+08
+7	pbkdf2_sha256$24000$1EbtWgpDalLO$hgo9iLvGxaqpwStVginVFBTCVZjlLZvOnkOZM4+7KyI=	\N	f	user006				f	t	2016-05-26 18:20:49+08
 \.
 
 
@@ -708,7 +849,7 @@ SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('auth_user_id_seq', 5, true);
+SELECT pg_catalog.setval('auth_user_id_seq', 9, true);
 
 
 --
@@ -748,6 +889,25 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 15	2016-05-25 20:17:43.454123+08	1	team001	2	Changed project.	8	1
 16	2016-05-25 20:19:41.362833+08	2	team002	2	Changed project.	8	1
 17	2016-05-25 20:46:07.076402+08	1	peter	2	Changed password.	4	1
+18	2016-05-26 17:06:42.660686+08	1	Comment object	1	Added.	10	1
+19	2016-05-26 17:07:17.62368+08	2	Comment object	1	Added.	10	1
+20	2016-05-26 17:07:24.200076+08	3	Comment object	1	Added.	10	1
+21	2016-05-26 17:49:23.15976+08	2	user001	2	Added profile "user001's Profile".	4	1
+22	2016-05-26 18:13:26.060723+08	1	peter	2	Added profile "peter's Profile".	4	1
+23	2016-05-26 18:15:37.562377+08	2	user001	2	Changed school, major, grade and description for profile "user001's Profile".	4	1
+24	2016-05-26 18:20:42.599673+08	6	user005	1	Added.	4	1
+25	2016-05-26 18:20:49.562026+08	7	user006	1	Added.	4	1
+26	2016-05-26 18:20:52.451778+08	8	user	1	Added.	4	1
+27	2016-05-26 18:21:00.618428+08	9	user007	1	Added.	4	1
+28	2016-05-26 18:21:37.893643+08	3	team003	1	Added.	8	1
+29	2016-05-26 18:26:12.014644+08	9	user007	2	Added profile "user007's Profile".	4	1
+30	2016-05-26 18:27:19.937591+08	8	user	3		4	1
+31	2016-05-26 19:13:42.890954+08	3	user002	2	Added profile "user002's Profile".	4	1
+32	2016-05-26 19:13:57.422467+08	3	user002	2	Changed commentList for profile "user002's Profile".	4	1
+33	2016-05-26 21:34:10.371497+08	4	user003	2	Added profile "user003's Profile".	4	1
+34	2016-05-26 21:34:15.807859+08	5	user004	2	Added profile "user004's Profile".	4	1
+35	2016-05-26 21:34:20.60503+08	6	user005	2	Added profile "user005's Profile".	4	1
+36	2016-05-26 21:34:24.952969+08	7	user006	2	Added profile "user006's Profile".	4	1
 \.
 
 
@@ -755,7 +915,7 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 17, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 36, true);
 
 
 --
@@ -772,6 +932,8 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 7	teamBuilder	profile
 8	teamBuilder	team
 9	teamBuilder	project
+10	teamBuilder	comment
+11	teamBuilder	restriction
 \.
 
 
@@ -779,7 +941,7 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('django_content_type_id_seq', 9, true);
+SELECT pg_catalog.setval('django_content_type_id_seq', 11, true);
 
 
 --
@@ -809,6 +971,11 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 20	teamBuilder	0008_remove_profile_tags	2016-05-25 17:30:05.145163+08
 21	teamBuilder	0009_auto_20160525_1216	2016-05-25 20:16:09.828182+08
 22	teamBuilder	0010_auto_20160525_1217	2016-05-25 20:17:22.470719+08
+23	teamBuilder	0011_auto_20160526_0905	2016-05-26 17:05:50.558728+08
+24	teamBuilder	0012_auto_20160526_0942	2016-05-26 17:42:59.259914+08
+25	teamBuilder	0013_auto_20160526_1119	2016-05-26 19:19:09.086225+08
+26	teamBuilder	0014_auto_20160526_1333	2016-05-26 21:33:21.489186+08
+27	teamBuilder	0015_auto_20160526_1407	2016-05-26 22:07:27.85443+08
 \.
 
 
@@ -816,7 +983,7 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('django_migrations_id_seq', 22, true);
+SELECT pg_catalog.setval('django_migrations_id_seq', 27, true);
 
 
 --
@@ -826,22 +993,66 @@ SELECT pg_catalog.setval('django_migrations_id_seq', 22, true);
 COPY django_session (session_key, session_data, expire_date) FROM stdin;
 w8z6ilnpxiziimnunxyku3rl3kvjq2fn	ZGViNWFkY2JhYWNlMWYwZWZkNGM1NGM3MmViMTZkNzMzZWU5MDBkODp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI1NDdmM2VjYzJlY2NiY2NmMTQ1YjY0M2Y0MWFkMTE1OGVmOWNjNDZkIn0=	2016-06-08 16:16:39.696377+08
 zfrszc7limhtx3pdnpz5oheuasiios6d	NDZjYzA2NzExZTBhOGU3MWJhMDA3MzE3MzUzNzNmOTYyZjIwNjAxODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ3OWFhNTU0N2E5YTExMmU0M2YyZDA3NTJkZGQ3MTdmNWEwZTIxNTkiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2016-06-08 20:46:07.081788+08
+410ifqs3nr188lajuzkrp35dtxa2uotz	MDdkMzhkZjFhYzA4OTg2ZDRmMTY0ZDFmZGMwMDNhZTAxMTIzY2QyYTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDc5YWE1NTQ3YTlhMTEyZTQzZjJkMDc1MmRkZDcxN2Y1YTBlMjE1OSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2016-06-09 17:06:16.318341+08
 \.
+
+
+--
+-- Data for Name: teamBuilder_comment; Type: TABLE DATA; Schema: public; Owner: dbuser
+--
+
+COPY "teamBuilder_comment" (id, content, "time", marker_id) FROM stdin;
+1	This is a comment	2016-05-26 17:06:40+08	2
+2	This is a comment	2016-05-26 17:06:50+08	3
+3	This is a comment	2016-05-26 17:07:23+08	4
+\.
+
+
+--
+-- Name: teamBuilder_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dbuser
+--
+
+SELECT pg_catalog.setval('"teamBuilder_comment_id_seq"', 3, true);
 
 
 --
 -- Data for Name: teamBuilder_profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY "teamBuilder_profile" (id, realname, phone, school, major, description, user_id, role, grade) FROM stdin;
+COPY "teamBuilder_profile" (id, realname, phone, school, major, description, user_id, role, grade, department, tags) FROM stdin;
+2	Peter	123	A	B	D	1	common	C		\N
+1	张三	123456	A	B	D	2	common	C		\N
+3					F	9	common			\N
+4					This is a description	3	common			\N
+5					This is a description	4	common			{}
+6					This is a description	5	common			{}
+7					This is a description	6	common			{}
+8					This is a description	7	common			{}
 \.
+
+
+--
+-- Data for Name: teamBuilder_profile_commentList; Type: TABLE DATA; Schema: public; Owner: dbuser
+--
+
+COPY "teamBuilder_profile_commentList" (id, profile_id, comment_id) FROM stdin;
+1	3	1
+2	4	1
+\.
+
+
+--
+-- Name: teamBuilder_profile_commentList_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dbuser
+--
+
+SELECT pg_catalog.setval('"teamBuilder_profile_commentList_id_seq"', 2, true);
 
 
 --
 -- Name: teamBuilder_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"teamBuilder_profile_id_seq"', 1, false);
+SELECT pg_catalog.setval('"teamBuilder_profile_id_seq"', 8, true);
 
 
 --
@@ -862,12 +1073,28 @@ SELECT pg_catalog.setval('"teamBuilder_project_id_seq"', 3, true);
 
 
 --
+-- Data for Name: teamBuilder_restriction; Type: TABLE DATA; Schema: public; Owner: dbuser
+--
+
+COPY "teamBuilder_restriction" (id, school, department, major, min_num, max_num) FROM stdin;
+\.
+
+
+--
+-- Name: teamBuilder_restriction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dbuser
+--
+
+SELECT pg_catalog.setval('"teamBuilder_restriction_id_seq"', 1, false);
+
+
+--
 -- Data for Name: teamBuilder_team; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY "teamBuilder_team" (id, name, captain_id, tags, is_confirmed, project_id) FROM stdin;
-1	team001	2	{tag1,tag2,tag3}	f	1
-2	team002	3	{}	f	3
+COPY "teamBuilder_team" (id, name, captain_id, tags, is_confirmed, project_id, description) FROM stdin;
+1	team001	2	{tag1,tag2,tag3}	f	1	This is a description
+2	team002	3	{}	f	3	This is a description
+3	team003	9	{}	f	1	This is a description
 \.
 
 
@@ -875,28 +1102,25 @@ COPY "teamBuilder_team" (id, name, captain_id, tags, is_confirmed, project_id) F
 -- Name: teamBuilder_team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"teamBuilder_team_id_seq"', 2, true);
+SELECT pg_catalog.setval('"teamBuilder_team_id_seq"', 3, true);
 
 
 --
--- Data for Name: teamBuilder_team_members; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: teamBuilder_team_memberList; Type: TABLE DATA; Schema: public; Owner: dbuser
 --
 
-COPY "teamBuilder_team_members" (id, team_id, user_id) FROM stdin;
-1	1	2
-2	1	3
-3	1	4
-4	1	5
-5	2	4
-6	2	5
+COPY "teamBuilder_team_memberList" (id, team_id, user_id) FROM stdin;
+1	3	5
+2	3	6
+3	3	7
 \.
 
 
 --
--- Name: teamBuilder_team_members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dbuser
 --
 
-SELECT pg_catalog.setval('"teamBuilder_team_members_id_seq"', 6, true);
+SELECT pg_catalog.setval('"teamBuilder_team_memberList_id_seq"', 3, true);
 
 
 --
@@ -1036,6 +1260,30 @@ ALTER TABLE ONLY django_session
 
 
 --
+-- Name: teamBuilder_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_comment"
+    ADD CONSTRAINT "teamBuilder_comment_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: teamBuilder_profile_commentList_pkey; Type: CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_profile_commentList"
+    ADD CONSTRAINT "teamBuilder_profile_commentList_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: teamBuilder_profile_commentList_profile_id_a364e636_uniq; Type: CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_profile_commentList"
+    ADD CONSTRAINT "teamBuilder_profile_commentList_profile_id_a364e636_uniq" UNIQUE (profile_id, comment_id);
+
+
+--
 -- Name: teamBuilder_profile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1060,6 +1308,14 @@ ALTER TABLE ONLY "teamBuilder_project"
 
 
 --
+-- Name: teamBuilder_restriction_pkey; Type: CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_restriction"
+    ADD CONSTRAINT "teamBuilder_restriction_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: teamBuilder_team_captain_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1068,19 +1324,19 @@ ALTER TABLE ONLY "teamBuilder_team"
 
 
 --
--- Name: teamBuilder_team_members_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_pkey; Type: CONSTRAINT; Schema: public; Owner: dbuser
 --
 
-ALTER TABLE ONLY "teamBuilder_team_members"
-    ADD CONSTRAINT "teamBuilder_team_members_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY "teamBuilder_team_memberList"
+    ADD CONSTRAINT "teamBuilder_team_memberList_pkey" PRIMARY KEY (id);
 
 
 --
--- Name: teamBuilder_team_members_team_id_bdb093b1_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_team_id_7a6db36b_uniq; Type: CONSTRAINT; Schema: public; Owner: dbuser
 --
 
-ALTER TABLE ONLY "teamBuilder_team_members"
-    ADD CONSTRAINT "teamBuilder_team_members_team_id_bdb093b1_uniq" UNIQUE (team_id, user_id);
+ALTER TABLE ONLY "teamBuilder_team_memberList"
+    ADD CONSTRAINT "teamBuilder_team_memberList_team_id_7a6db36b_uniq" UNIQUE (team_id, user_id);
 
 
 --
@@ -1183,6 +1439,27 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON django_session USING bt
 
 
 --
+-- Name: teamBuilder_comment_945c7b03; Type: INDEX; Schema: public; Owner: dbuser
+--
+
+CREATE INDEX "teamBuilder_comment_945c7b03" ON "teamBuilder_comment" USING btree (marker_id);
+
+
+--
+-- Name: teamBuilder_profile_commentList_69b97d17; Type: INDEX; Schema: public; Owner: dbuser
+--
+
+CREATE INDEX "teamBuilder_profile_commentList_69b97d17" ON "teamBuilder_profile_commentList" USING btree (comment_id);
+
+
+--
+-- Name: teamBuilder_profile_commentList_83a0eb3f; Type: INDEX; Schema: public; Owner: dbuser
+--
+
+CREATE INDEX "teamBuilder_profile_commentList_83a0eb3f" ON "teamBuilder_profile_commentList" USING btree (profile_id);
+
+
+--
 -- Name: teamBuilder_team_b098ad43; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1190,17 +1467,17 @@ CREATE INDEX "teamBuilder_team_b098ad43" ON "teamBuilder_team" USING btree (proj
 
 
 --
--- Name: teamBuilder_team_members_e8701ad4; Type: INDEX; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_e8701ad4; Type: INDEX; Schema: public; Owner: dbuser
 --
 
-CREATE INDEX "teamBuilder_team_members_e8701ad4" ON "teamBuilder_team_members" USING btree (user_id);
+CREATE INDEX "teamBuilder_team_memberList_e8701ad4" ON "teamBuilder_team_memberList" USING btree (user_id);
 
 
 --
--- Name: teamBuilder_team_members_f6a7ca40; Type: INDEX; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_f6a7ca40; Type: INDEX; Schema: public; Owner: dbuser
 --
 
-CREATE INDEX "teamBuilder_team_members_f6a7ca40" ON "teamBuilder_team_members" USING btree (team_id);
+CREATE INDEX "teamBuilder_team_memberList_f6a7ca40" ON "teamBuilder_team_memberList" USING btree (team_id);
 
 
 --
@@ -1276,6 +1553,30 @@ ALTER TABLE ONLY django_admin_log
 
 
 --
+-- Name: teamBuilder_comment_marker_id_e0ccaada_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_comment"
+    ADD CONSTRAINT "teamBuilder_comment_marker_id_e0ccaada_fk_auth_user_id" FOREIGN KEY (marker_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: teamBuilder_profi_comment_id_3bce42bf_fk_teamBuilder_comment_id; Type: FK CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_profile_commentList"
+    ADD CONSTRAINT "teamBuilder_profi_comment_id_3bce42bf_fk_teamBuilder_comment_id" FOREIGN KEY (comment_id) REFERENCES "teamBuilder_comment"(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: teamBuilder_profi_profile_id_d1a78446_fk_teamBuilder_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: dbuser
+--
+
+ALTER TABLE ONLY "teamBuilder_profile_commentList"
+    ADD CONSTRAINT "teamBuilder_profi_profile_id_d1a78446_fk_teamBuilder_profile_id" FOREIGN KEY (profile_id) REFERENCES "teamBuilder_profile"(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: teamBuilder_profile_user_id_e939c523_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1300,19 +1601,19 @@ ALTER TABLE ONLY "teamBuilder_team"
 
 
 --
--- Name: teamBuilder_team_member_team_id_e34d5273_fk_teamBuilder_team_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_memberList_user_id_7e189c8c_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: dbuser
 --
 
-ALTER TABLE ONLY "teamBuilder_team_members"
-    ADD CONSTRAINT "teamBuilder_team_member_team_id_e34d5273_fk_teamBuilder_team_id" FOREIGN KEY (team_id) REFERENCES "teamBuilder_team"(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY "teamBuilder_team_memberList"
+    ADD CONSTRAINT "teamBuilder_team_memberList_user_id_7e189c8c_fk_auth_user_id" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: teamBuilder_team_members_user_id_ec32edc1_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: teamBuilder_team_member_team_id_946adb88_fk_teamBuilder_team_id; Type: FK CONSTRAINT; Schema: public; Owner: dbuser
 --
 
-ALTER TABLE ONLY "teamBuilder_team_members"
-    ADD CONSTRAINT "teamBuilder_team_members_user_id_ec32edc1_fk_auth_user_id" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY "teamBuilder_team_memberList"
+    ADD CONSTRAINT "teamBuilder_team_member_team_id_946adb88_fk_teamBuilder_team_id" FOREIGN KEY (team_id) REFERENCES "teamBuilder_team"(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
