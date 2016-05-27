@@ -42,5 +42,6 @@ urlpatterns = [
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
     url(r'^logout/$', views.LogoutView, name='logout'),
     url(r'^login/$', views.LoginView.as_view(), name='login'),
-    url(r'^$', views.IndexView.as_view(), name='index')
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^', include('teamBuilder.urls')),
 ]

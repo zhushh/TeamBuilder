@@ -6,12 +6,15 @@ from django.contrib.postgres.fields import ArrayField
 4
 # Create your models here.
 
-ROLE_CHOICE = (('common', 'common'), ('special', 'special'))
+
 
 # user.teamAsCaptain
 # user.teamAsMember
 # user.projectPublished.all()
 class Profile(models.Model):
+    ROLE_CHOICE = (('common', 'common'),
+                   ('special', 'special'))
+
     user        = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     realname    = models.CharField(max_length=20, blank=True, default='张三')
     phone       = models.CharField(max_length=20, blank=True, default='18800000000')
