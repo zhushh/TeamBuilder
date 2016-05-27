@@ -11,8 +11,13 @@ This a web app, a team course project in SYSU.
 # Requirement
 
 - python3
-- django 1.96
 - PostgreSQL 9.5
+
+# Libraies
+
+- django 1.96
+- djangorestframework
+
 
 # Run
 
@@ -32,3 +37,5 @@ visit `localhost:8000/admin` to manage the website as super user.
 usename: peter
 password: teambuilder
 ```
+
+visit `localhost:8000/api` to manage api.

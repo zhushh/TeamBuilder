@@ -43,4 +43,4 @@ def LogoutView(request):
 
 class IndexView(generic.TemplateView):
     template_name = 'layout/base.html'
-    
+ 

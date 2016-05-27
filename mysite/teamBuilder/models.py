@@ -13,16 +13,16 @@ ROLE_CHOICE = (('common', 'common'), ('special', 'special'))
 # user.projectPublished.all()
 class Profile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
-    realname    = models.CharField(max_length=20, blank=True)
-    phone       = models.CharField(max_length=20, blank=True)
-    school      = models.CharField(max_length=20, blank=True)
-    department  = models.CharField(max_length=20, blank=True)
-    major       = models.CharField(max_length=20, blank=True)
-    grade       = models.CharField(max_length=20, blank=True)
+    realname    = models.CharField(max_length=20, blank=True, default='张三')
+    phone       = models.CharField(max_length=20, blank=True, default='18800000000')
+    school      = models.CharField(max_length=20, blank=True, default='Sun Yat-Sen University')
+    department  = models.CharField(max_length=20, blank=True, default='School of Data and Computer Science')
+    major       = models.CharField(max_length=20, blank=True, default='Software Engineering')
+    grade       = models.CharField(max_length=20, blank=True, default='2013')
     description = models.TextField(default="This is a description")
     role        = models.CharField(max_length=20, choices=ROLE_CHOICE, null=True,
                                    default=('common', 'common'))
-    tags        = ArrayField(models.CharField(max_length=20), blank=True, null=True)
+    tags        = ArrayField(models.CharField(max_length=20), blank=True, null=True, default=['tag1', 'tag2', 'tag3'])
     commentList = models.ManyToManyField('Comment', related_name='profileCommented',
                                          blank=True)
 
@@ -35,7 +35,7 @@ class Project(models.Model):
     title       = models.CharField(max_length=20, blank=True)
     publisher   = models.ForeignKey(User, related_name='projectPublished',
                                     on_delete=models.CASCADE, blank=True)
-    description = models.TextField()
+    description = models.TextField(default="This is a description")
 
 
     def __str__(self):
@@ -49,7 +49,7 @@ class Team(models.Model):
     captain      = models.OneToOneField(User, related_name='teamAsCaptain',
                                         on_delete=models.CASCADE, blank=True, null=True)
     memberList   = models.ManyToManyField(User, related_name='teamAsMember', blank=True)
-    tags         = ArrayField(models.CharField(max_length=20), blank=True, null=True)
+    tags         = ArrayField(models.CharField(max_length=20), blank=True, null=True, default=['tag1', 'tag2', 'tag3'])
     description  = models.TextField(default="This is a description")
     is_confirmed = models.BooleanField(default=False)
 
@@ -62,15 +62,15 @@ class Team(models.Model):
 class Comment(models.Model):
     marker  = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     content = models.CharField(max_length = 50, default="This is a comment")
-    time    = models.DateTimeField()
+    time    = models.DateTimeField('publish_time')
 
     def __str__(self):
         return self.marker.username + " " + self.content + " " + str(self.time)
 
 
 class Restriction(models.Model):
-    school     = models.CharField(max_length=20, blank=True)
-    department = models.CharField(max_length=20, blank=True)
-    major      = models.CharField(max_length=20, blank=True)
-    min_num    = models.PositiveIntegerField(null=True, blank=True)
-    max_num    = models.PositiveIntegerField(null=True, blank=True)
+    school     = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
+    department = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
+    major      = models.CharField(max_length=40, blank=True, default='Software Engineering')
+    min_num    = models.PositiveIntegerField(null=True, blank=True, default=3)
+    max_num    = models.PositiveIntegerField(null=True, blank=True, default=10)

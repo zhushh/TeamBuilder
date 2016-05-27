@@ -15,9 +15,29 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from . import views
 
+
+from django.contrib.auth.models import User
+from rest_framework import routers
+from . import views
+from api import views as api_views
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', api_views.UserViewSet)
+router.register(r'profiles', api_views.ProfileViewSet)
+router.register(r'projects', api_views.ProjectViewSet)
+router.register(r'teams', api_views.TeamViewSet)
+router.register(r'comments', api_views.CommentViewSet)
+router.register(r'restrictions', api_views.RestrictionViewSet)
+
+
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
     url(r'^logout/$', views.LogoutView, name='logout'),

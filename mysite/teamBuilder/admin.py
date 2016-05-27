@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Team, Project, Comment
+from .models import Profile, Team, Project, Comment, Restriction
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
@@ -27,6 +27,10 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('marker', 'content', 'time')
+
+@admin.register(Restriction)
+class RestrictionAdmin(admin.ModelAdmin):
+    list_display = ('school', 'department', 'major', 'min_num', 'max_num')
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

@@ -519,9 +519,9 @@ ALTER SEQUENCE "teamBuilder_project_id_seq" OWNED BY "teamBuilder_project".id;
 
 CREATE TABLE "teamBuilder_restriction" (
     id integer NOT NULL,
-    school character varying(20) NOT NULL,
-    department character varying(20) NOT NULL,
-    major character varying(20) NOT NULL,
+    school character varying(40) NOT NULL,
+    department character varying(40) NOT NULL,
+    major character varying(40) NOT NULL,
     min_num integer,
     max_num integer,
     CONSTRAINT "teamBuilder_restriction_max_num_check" CHECK ((max_num >= 0)),
@@ -819,7 +819,6 @@ SELECT pg_catalog.setval('auth_permission_id_seq', 33, true);
 --
 
 COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$24000$9ZW6GnSrlpd2$jpdWMx1S67kn6jyK8EaAA44ZjhI7TJR/R+pymd0p/IY=	2016-05-26 17:06:16+08	t	peter			sptzxbbb@gmail.com	t	t	2016-05-25 16:16:04+08
 2	pbkdf2_sha256$24000$lK0XLhrvqaxE$1XFBGTV3BHeMva2oRg5q9E8diYpN764Pp37NLSrqXrY=	\N	f	user001				f	t	2016-05-25 16:17:32+08
 9	pbkdf2_sha256$24000$36Eap7ip1bla$5Mi7RgXrD0mJMp6IkIGnrjSvgmyCyfySRJJBKpyfkNw=	\N	f	user007				f	t	2016-05-26 18:21:00+08
 3	pbkdf2_sha256$24000$5uTtiYNPlFzA$ii86FmOd3n2GEQObfBrdOvL7zGMC8QvCoi7AIMrZqqk=	\N	f	user002				f	t	2016-05-25 16:17:43+08
@@ -827,6 +826,9 @@ COPY auth_user (id, password, last_login, is_superuser, username, first_name, la
 5	pbkdf2_sha256$24000$Ks72qJR1or96$/mVVh5GY5FJjCSm0WVP1Qk3ZUz4lYyQAxwzZPsfnkzU=	\N	f	user004				f	t	2016-05-25 16:18:09+08
 6	pbkdf2_sha256$24000$Rt0pacwo98Ly$MYiykkIZPVEU7H7rcVbe7rO49uhoCeMbNrC55dmpJwc=	\N	f	user005				f	t	2016-05-26 18:20:42+08
 7	pbkdf2_sha256$24000$1EbtWgpDalLO$hgo9iLvGxaqpwStVginVFBTCVZjlLZvOnkOZM4+7KyI=	\N	f	user006				f	t	2016-05-26 18:20:49+08
+10	pbkdf2_sha256$24000$6Boqt6o3feyk$EeMuNxHTkJpXw3TBvhh3p31clSdrFp8hLanc2PlrUfs=	\N	f	user008			user008@qq.com	f	t	2016-05-27 10:36:40.367852+08
+1	pbkdf2_sha256$24000$9ZW6GnSrlpd2$jpdWMx1S67kn6jyK8EaAA44ZjhI7TJR/R+pymd0p/IY=	2016-05-27 10:34:22+08	t	peter			sptzxbbb@gmail.com	t	t	2016-05-25 16:16:04+08
+11	pbkdf2_sha256$24000$cuMePOkKTLtM$rimK9R2695XfEEcyoXjaugHxI9udwcCVqL2+HTs2R9c=	2016-05-27 12:17:07.882027+08	f	user009				f	t	2016-05-27 12:07:26.704462+08
 \.
 
 
@@ -849,7 +851,7 @@ SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('auth_user_id_seq', 9, true);
+SELECT pg_catalog.setval('auth_user_id_seq', 11, true);
 
 
 --
@@ -908,6 +910,12 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 34	2016-05-26 21:34:15.807859+08	5	user004	2	Added profile "user004's Profile".	4	1
 35	2016-05-26 21:34:20.60503+08	6	user005	2	Added profile "user005's Profile".	4	1
 36	2016-05-26 21:34:24.952969+08	7	user006	2	Added profile "user006's Profile".	4	1
+37	2016-05-27 10:38:21.788708+08	10	user008	2	Changed password.	4	1
+38	2016-05-27 12:03:50.735013+08	1	Restriction object	1	Added.	11	1
+39	2016-05-27 12:04:56.18909+08	1	Restriction object	2	Changed department.	11	1
+40	2016-05-27 12:05:04.136996+08	1	Restriction object	2	Changed school, min_num and max_num.	11	1
+41	2016-05-27 12:06:13.096079+08	1	peter	2	Changed tags for profile "peter's Profile".	4	1
+42	2016-05-27 12:07:26.7639+08	11	user009	1	Added. Added profile "user009's Profile".	4	1
 \.
 
 
@@ -915,7 +923,7 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 36, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 42, true);
 
 
 --
@@ -976,6 +984,9 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 25	teamBuilder	0013_auto_20160526_1119	2016-05-26 19:19:09.086225+08
 26	teamBuilder	0014_auto_20160526_1333	2016-05-26 21:33:21.489186+08
 27	teamBuilder	0015_auto_20160526_1407	2016-05-26 22:07:27.85443+08
+28	teamBuilder	0016_auto_20160527_0404	2016-05-27 12:04:47.593984+08
+29	teamBuilder	0017_auto_20160527_0407	2016-05-27 12:07:06.659006+08
+30	teamBuilder	0018_auto_20160527_0412	2016-05-27 12:12:13.586254+08
 \.
 
 
@@ -983,7 +994,7 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('django_migrations_id_seq', 27, true);
+SELECT pg_catalog.setval('django_migrations_id_seq', 30, true);
 
 
 --
@@ -993,7 +1004,7 @@ SELECT pg_catalog.setval('django_migrations_id_seq', 27, true);
 COPY django_session (session_key, session_data, expire_date) FROM stdin;
 w8z6ilnpxiziimnunxyku3rl3kvjq2fn	ZGViNWFkY2JhYWNlMWYwZWZkNGM1NGM3MmViMTZkNzMzZWU5MDBkODp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI1NDdmM2VjYzJlY2NiY2NmMTQ1YjY0M2Y0MWFkMTE1OGVmOWNjNDZkIn0=	2016-06-08 16:16:39.696377+08
 zfrszc7limhtx3pdnpz5oheuasiios6d	NDZjYzA2NzExZTBhOGU3MWJhMDA3MzE3MzUzNzNmOTYyZjIwNjAxODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ3OWFhNTU0N2E5YTExMmU0M2YyZDA3NTJkZGQ3MTdmNWEwZTIxNTkiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2016-06-08 20:46:07.081788+08
-410ifqs3nr188lajuzkrp35dtxa2uotz	MDdkMzhkZjFhYzA4OTg2ZDRmMTY0ZDFmZGMwMDNhZTAxMTIzY2QyYTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDc5YWE1NTQ3YTlhMTEyZTQzZjJkMDc1MmRkZDcxN2Y1YTBlMjE1OSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2016-06-09 17:06:16.318341+08
+70v62ha4cnx6jb1pe9j64uf6q5bbp2wd	ZmZiN2I5OTU4MTU2OWEwMzc0M2M5MTQ0OTY0MWUyNDNiNGI4YWJiMjp7Il9hdXRoX3VzZXJfaWQiOiIxMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYTY2YTJiMTM5YTI2OTJlOGMxYThiMWRmY2ViNTVhNTA0Y2JjOGQ1NiJ9	2016-06-10 12:17:07.885975+08
 \.
 
 
@@ -1020,7 +1031,6 @@ SELECT pg_catalog.setval('"teamBuilder_comment_id_seq"', 3, true);
 --
 
 COPY "teamBuilder_profile" (id, realname, phone, school, major, description, user_id, role, grade, department, tags) FROM stdin;
-2	Peter	123	A	B	D	1	common	C		\N
 1	张三	123456	A	B	D	2	common	C		\N
 3					F	9	common			\N
 4					This is a description	3	common			\N
@@ -1028,6 +1038,8 @@ COPY "teamBuilder_profile" (id, realname, phone, school, major, description, use
 6					This is a description	5	common			{}
 7					This is a description	6	common			{}
 8					This is a description	7	common			{}
+2	Peter	123	A	B	D	1	common	C		{A,B,C}
+9					This is a description	11	common			{tag1,tag2,tag3}
 \.
 
 
@@ -1052,7 +1064,7 @@ SELECT pg_catalog.setval('"teamBuilder_profile_commentList_id_seq"', 2, true);
 -- Name: teamBuilder_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"teamBuilder_profile_id_seq"', 8, true);
+SELECT pg_catalog.setval('"teamBuilder_profile_id_seq"', 9, true);
 
 
 --
@@ -1077,6 +1089,7 @@ SELECT pg_catalog.setval('"teamBuilder_project_id_seq"', 3, true);
 --
 
 COPY "teamBuilder_restriction" (id, school, department, major, min_num, max_num) FROM stdin;
+1	Sun Yat-Sen University	School of Data and Computer Science	Software Engineering	3	10
 \.
 
 
@@ -1084,7 +1097,7 @@ COPY "teamBuilder_restriction" (id, school, department, major, min_num, max_num)
 -- Name: teamBuilder_restriction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dbuser
 --
 
-SELECT pg_catalog.setval('"teamBuilder_restriction_id_seq"', 1, false);
+SELECT pg_catalog.setval('"teamBuilder_restriction_id_seq"', 1, true);
 
 
 --
