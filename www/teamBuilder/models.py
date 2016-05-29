@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-4
+
 # Create your models here.
 
 
@@ -72,6 +72,7 @@ class Comment(models.Model):
 
 
 class Restriction(models.Model):
+    project = models.OneToOneField(Project, on_delete=models.CASCADE, blank=True, null=True)
     school     = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
     department = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
     major      = models.CharField(max_length=40, blank=True, default='Software Engineering')

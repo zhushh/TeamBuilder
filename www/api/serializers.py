@@ -5,7 +5,7 @@ from teamBuilder.models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'is_staff')
+        fields = ('url', 'username', 'email', 'is_staff', 'profile')
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -15,7 +15,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ('url', 'title', 'publisher', 'description')
+        fields = ('url', 'title', 'publisher', 'description', 'restriction')
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
