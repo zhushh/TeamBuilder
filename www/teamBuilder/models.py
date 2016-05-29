@@ -7,7 +7,6 @@ from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 
-
 # user.teamAsCaptain
 # user.teamAsMember
 # user.projectPublished.all()
@@ -35,23 +34,28 @@ class Profile(models.Model):
 
 # project.teamEnroll.all()
 class Project(models.Model):
+    owner   = models.ForeignKey(User, related_name='project_published',
+                                    on_delete=models.CASCADE, blank=True, null=True)
     title       = models.CharField(max_length=20, blank=True)
-    publisher   = models.ForeignKey(User, related_name='projectPublished',
-                                    on_delete=models.CASCADE, blank=True)
     description = models.TextField(default="This is a description")
 
+    school     = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
+    department = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
+    major      = models.CharField(max_length=40, blank=True, default='Software Engineering')
+    min_num    = models.PositiveIntegerField(null=True, blank=True, default=3)
+    max_num    = models.PositiveIntegerField(null=True, blank=True, default=10)
 
     def __str__(self):
         return self.title
 
-
 class Team(models.Model):
+    owner      = models.OneToOneField(User, related_name='teamAsCaptain',
+                                        on_delete=models.CASCADE, blank=True, null=True)
+    memberList   = models.ManyToManyField(User, related_name='teamAsMember', blank=True)
     project      = models.ForeignKey(Project, on_delete=models.CASCADE, null=True,
                                      related_name='teamEnroll')
     name         = models.CharField(max_length=20, blank=True)
-    captain      = models.OneToOneField(User, related_name='teamAsCaptain',
-                                        on_delete=models.CASCADE, blank=True, null=True)
-    memberList   = models.ManyToManyField(User, related_name='teamAsMember', blank=True)
+
     tags         = ArrayField(models.CharField(max_length=20), blank=True, null=True, default=['tag1', 'tag2', 'tag3'])
     description  = models.TextField(default="This is a description")
     is_confirmed = models.BooleanField(default=False)
@@ -63,18 +67,11 @@ class Team(models.Model):
 
 # comment.profileCommented.all()
 class Comment(models.Model):
-    marker  = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    owner  = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     content = models.CharField(max_length = 50, default="This is a comment")
     time    = models.DateTimeField('publish_time')
 
     def __str__(self):
-        return self.marker.username + " " + self.content + " " + str(self.time)
+        return self.owner.username + " " + self.content + " " + str(self.time)
 
 
-class Restriction(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE, blank=True, null=True)
-    school     = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
-    department = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
-    major      = models.CharField(max_length=40, blank=True, default='Software Engineering')
-    min_num    = models.PositiveIntegerField(null=True, blank=True, default=3)
-    max_num    = models.PositiveIntegerField(null=True, blank=True, default=10)

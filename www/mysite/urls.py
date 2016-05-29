@@ -29,7 +29,6 @@ router.register(r'profiles', api_views.ProfileViewSet)
 router.register(r'projects', api_views.ProjectViewSet)
 router.register(r'teams', api_views.TeamViewSet)
 router.register(r'comments', api_views.CommentViewSet)
-router.register(r'restrictions', api_views.RestrictionViewSet)
 
 
 

@@ -40,5 +40,3 @@ password: teambuilder
 
 visit `localhost:8000/api` to manage api.
 
-
-sdlfkj
