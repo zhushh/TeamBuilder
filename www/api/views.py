@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from rest_framework import permissions
+from rest_framework.permissions import *
 from api.serializers import *
 from teamBuilder.models import *
 from teamBuilder.permissions import *
@@ -33,8 +33,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly, )
+    permission_classes = [IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,
+                          IsPublisherOrReadOnly,
+                          ]
+
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

@@ -11,6 +11,17 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True
-        print("---test---")
         # Write permissions are only allowed to the owner of the snippet.
-        return obj.owner == request.user
+        return (obj.owner == request.user or request.user.is_staff)
+
+
+class IsPublisherOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # print(request.method + " " + request.user.profile.role)
+        if request.method == 'POST':
+            if request.user.profile.role == 'special':
+                return True
+            else:
+                return False
+        else:
+            return True
