@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-
+from rest_framework.permissions import *
 from api.serializers import *
 from teamBuilder.models import *
+from teamBuilder.permissions import *
 # Create your views here.
 
 
@@ -20,6 +21,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -27,6 +33,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,
+                          IsPublisherOrReadOnly,
+                          ]
+
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class TeamViewSet(viewsets.ModelViewSet):
     """
@@ -34,6 +48,11 @@ class TeamViewSet(viewsets.ModelViewSet):
     """
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class CommentViewSet(viewsets.ModelViewSet):
     """
@@ -41,10 +60,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
 
-class RestrictionViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows restrictions to be viewed or edited
-    """
-    queryset = Restriction.objects.all()
-    serializer_class = RestrictionSerializer
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
