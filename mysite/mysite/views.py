@@ -1,12 +1,18 @@
-#! /usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+from django.shortcuts import render
+from rest_framework import viewsets
+from django.contrib.auth.models import User
+from rest_framework.permissions import *
+from mysite.serializers import *
+from teamBuilder.models import *
+from teamBuilder.permissions import *
 from django.views.generic.edit import FormView
 from django.views import generic
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from .forms import RegisterForm, LoginForm
+# Create your views here.
+
 
 class RegisterView(FormView):
     template_name = 'accounts/register.html'
@@ -43,4 +49,64 @@ def LogoutView(request):
 
 class IndexView(generic.TemplateView):
     template_name = 'layout/base.html'
- 
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users' profile to be viewed or edited
+    """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows projects to be viewed or edited
+    """
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,
+                          IsPublisherOrReadOnly,
+                          ]
+
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class TeamViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows teams to be viewed or edited
+    """
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows comments to be viewed or edited
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+

@@ -8,15 +8,6 @@
 
 This a web app, a team course project in SYSU.
 SQLite3 array
-# Requirement
-
-- python3
-- PostgreSQL 9.5
-
-# Libraries
-
-- django 1.96
-- django rest_framework
 
 # Run
 

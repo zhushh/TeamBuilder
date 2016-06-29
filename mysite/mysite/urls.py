@@ -20,15 +20,14 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers
 from . import views
-from api import views as api_views
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'users', api_views.UserViewSet)
-router.register(r'profiles', api_views.ProfileViewSet)
-router.register(r'projects', api_views.ProjectViewSet)
-router.register(r'teams', api_views.TeamViewSet)
-router.register(r'comments', api_views.CommentViewSet)
+router.register(r'users', views.UserViewSet)
+router.register(r'profiles', views.ProfileViewSet)
+router.register(r'projects', views.ProjectViewSet)
+router.register(r'teams', views.TeamViewSet)
+router.register(r'comments', views.CommentViewSet)
 
 
 
