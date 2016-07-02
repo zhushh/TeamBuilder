@@ -1,4 +1,4 @@
-*/*.pyc
-*/__pycache__
-*/migrations
+*.pyc
+__pycache__
+migrations
 venv

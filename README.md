@@ -7,13 +7,12 @@
 # Introduction
 
 This a web app, a team course project in SYSU.
-SQLite3 array
 
 # Run
 
 Please set up PostgreSQL according to `DATABASES` in `settings.py`.
 
-Then run the following command under `./mysite` directory. 
+Then run the following command under `mysite` directory. 
 
 ```
 ./manage.py runserver
