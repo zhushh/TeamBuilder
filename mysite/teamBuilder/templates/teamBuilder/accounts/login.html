@@ -5,7 +5,7 @@
             <h3 class="'panel-title'"><strong>Login</strong></h3>
         </div>
         <div class="panel-body">
-            <form method="post" action="{% url 'login' %}">{% csrf_token %}
+            <form method="post" action="{% url 'teamBuilder:login' %}">{% csrf_token %}
                 {% for field in form %}
                 <div class="fieldWrapper">
                     <label for="">{{ field.label }}</label>

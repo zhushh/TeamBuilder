@@ -8,6 +8,11 @@ urlpatterns = [
     url(r'^team/(?P<id>[0-9]+)', views.TeamDetailView.as_view()),
     url(r'^project/create$', views.ProjectCreateView.as_view()),
     url(r'^project/createTeam/(?P<id>[0-9]+)', views.TeamCreateView.as_view()),
-    url(r'^project/manage/(?P<id>[0-9]+)', views.ProjectManageView.as_view()), 
-    url(r'^project/(?P<id>[0-9]+)', views.ProjectDetailView.as_view())
+    url(r'^project/manage/(?P<id>[0-9]+)', views.ProjectManageView.as_view()),
+    url(r'^project/(?P<id>[0-9]+)', views.ProjectDetailView.as_view()),
+    # Following urls are used as testing temporarily
+    url(r'^register/$', views.RegisterView.as_view(), name='register'),
+    url(r'^logout/$', views.LogoutView, name='logout'),
+    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
 ]

@@ -7,7 +7,7 @@
                 <h3 class="panel-title"><strong>注册</strong></h3>
             </div>
             <div class="panel-body">
-                <form action="{% url 'register' %}" method="post">{% csrf_token %}
+                <form action="{% url 'teamBuilder:register' %}" method="post">{% csrf_token %}
 
                     {% for field in form %}
                     <div class="fieldWrapper">
