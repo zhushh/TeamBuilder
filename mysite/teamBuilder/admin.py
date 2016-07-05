@@ -23,7 +23,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'content', 'time')
+    list_display = ('owner', 'content', 'time', 'commentator')
 
 
 admin.site.unregister(User)
