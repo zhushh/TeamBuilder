@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +25,7 @@ SECRET_KEY = '(tjhfy*&ex#k7k!d0-mxz^!i9y$)(lgs1^+3x_zhoz*y(okf_e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,13 +82,9 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'TeamBuilderDB',
-        'USER': 'postgres',
-        'PASSWORD': 'admin123',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
     }
 }
+
 
 # DATABASES = {
 #     'default': {
@@ -133,8 +129,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -142,12 +149,19 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
+
+
 
 SWAGGER_SETTINGS = {
     'api_path': '/',
-    "api_version": '1.1',  # Specify your API's version
+    "api_version": '1.2',  # Specify your API's version
     'is_authenticated': False,
     'is_superuser': False,
 }
+
+local_db = 'postgres://postgres:admin123@localhost/TeamBuilderDB'
+db_from_env = dj_database_url.config(conn_max_age=500, default=local_db)
+DATABASES['default'].update(db_from_env)
