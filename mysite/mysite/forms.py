@@ -49,8 +49,8 @@ class RegisterForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         res = User.objects.filter(email=email)
-        if len(res) != 0:
-            raise forms.ValidationError(u'此邮箱已经注册，请重新输入')
+        # if len(res) != 0:
+            # raise forms.ValidationError(u'此邮箱已经注册，请重新输入')
         return email
 
     def clean(self):
@@ -66,6 +66,7 @@ class RegisterForm(forms.Form):
         email = self.cleaned_data['email']
         password = self.cleaned_data['password']
         user = User.objects.create_user(username, email, password)
+        user.is_active = False;
         user.save()
 
 class LoginForm(forms.Form):
