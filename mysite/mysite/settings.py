@@ -162,6 +162,9 @@ SWAGGER_SETTINGS = {
     'is_superuser': False,
 }
 
+# Mail settings
+# https://docs.djangoproject.com/en/1.9/topics/email/
+
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'teambuilder@sina.com'
