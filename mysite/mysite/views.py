@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework.permissions import *
 from mysite.serializers import *
 from teamBuilder.models import *
@@ -31,6 +32,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title',)
     permission_classes = [IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
                           IsPublisherOrReadOnly,
