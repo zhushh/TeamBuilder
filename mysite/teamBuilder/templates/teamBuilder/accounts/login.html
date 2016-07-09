@@ -1,32 +1,37 @@
+{% extends "index.html" %}
+
 {% block content %}
-<div class="login center-block">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="'panel-title'"><strong>Login</strong></h3>
-        </div>
-        <div class="panel-body">
-            <form method="post" action="{% url 'teamBuilder:login' %}">{% csrf_token %}
-                {% for field in form %}
-                <div class="fieldWrapper">
-                    <label for="">{{ field.label }}</label>
-                    {{ field }}
-                </div>
-                {% endfor %}
-                <button type="submit" value="login" />Login</button>
-            </form>
-
-            {% if form.non_field_errors %}
-            <div class="message">
-                <!-- <p>Your username and password didn't match. Please try again.</p> -->
-                {{ form.non_field_errors }}
-            </div>
-            {% endif %}
-        </div>
+    <div class="col-md-7">
+        <img src="/static/images/login-align.jpeg" class="img-thumbnail" alt="for-align" />
     </div>
-
-
-    <a href="{{request.META.HTTP_REFERER}}">Go back</a>
-
-</div>
-
+    <div class="col-md-5">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Remember me
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+          </div>
+        </form>
+    </div>
 {% endblock %}
