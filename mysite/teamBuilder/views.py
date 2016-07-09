@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
 from .models import *
 from .forms import *
+import hashlib
+import random
 
 # Create your views here.
 
@@ -38,17 +40,26 @@ class RegisterView(FormView):
     def mail_validate(username, to_email):
         subject = u'Teambuilder用户验证'
         from_email = 'teambuilder@sina.com'
-        text_content = u'您好，' + username + u'！恭喜您注册成功，请点击下面的链接激活您的账户：'
-        html_content = u'<b>激活链接：</b><a href="www.baidu.com">www.baidu.com</a>'
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-        msg.attach_alternative(html_content, 'text/html')
-        msg.send()
-        print("send email success!")
+        
+        # generate activation code
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]
+        username = username.encode('utf-8')
+        code = salt.encode('utf-8') + username
+        activation_key = hashlib.sha1(code).hexdigest()
+        user = User.objects.get(username=username)
+        profile = user.profile
+        profile.activation_key = activation_key
+        profile.save()
+
+        text_content = u'您好，' + username.decode('utf-8') + u'！恭喜您注册成功，请点击下面的链接激活您的账户：'
+        activation_url = 'localhost:3000/activation/' + activation_key
+        html_content = u'<b>激活链接：</b><a href="'+ activation_url +'">' + activation_url + '</a>'
+        send_mail(subject, text_content, from_email, [to_email], html_message=html_content)
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.save()
+        user = form.save()
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
         email = form.cleaned_data.get('email')
@@ -56,6 +67,23 @@ class RegisterView(FormView):
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super(RegisterView, self).form_valid(form)
+
+def ActivationView(request, activation_key):
+    SHA_RE = re.compile('^[a-f0-9]{40}$')
+    if SHA_RE.search(activation_key):
+        try:
+            user_profile = Profile.objects.get(activation_key=activation_key)
+        except :
+            return render_to_response('teamBuilder/activation/wrong_url.html')
+        user = user_profile.owner
+        user.is_active = True
+        user.save()
+        user_profile.activation_key = u'ALREADY_ACTIVATED'
+        user_profile.save()
+        login(request, user)
+        return HttpResponseRedirect(reverse('teamBuilder:index'))
+    else:
+        return render_to_response('teamBuilder/activation/wrong_url.html')
 
 class LoginView(FormView):
     template_name = 'teamBuilder/accounts/login.html'
