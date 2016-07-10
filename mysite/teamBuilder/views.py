@@ -38,7 +38,7 @@ class RegisterView(FormView):
     form_class = RegisterForm
     success_url = reverse_lazy('teamBuilder:index')
 
-    def mail_validate(username, to_email):
+    def mail_validate(self, username, to_email):
         subject = u'Teambuilder用户验证'
         from_email = 'teambuilder@sina.com'
         
@@ -53,7 +53,7 @@ class RegisterView(FormView):
         profile.save()
 
         text_content = u'您好，' + username.decode('utf-8') + u'！恭喜您注册成功，请点击下面的链接激活您的账户：'
-        activation_url = 'localhost:3000/teambuilder/user/activation/' + activation_key
+        activation_url = self.request.get_host() + '/teambuilder/user/activation/' + activation_key
         html_content = u'<b>激活链接：</b><a href="'+ activation_url +'">' + activation_url + '</a>'
         send_mail(subject, text_content, from_email, [to_email], html_message=html_content)
 
@@ -64,7 +64,7 @@ class RegisterView(FormView):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
         email = form.cleaned_data.get('email')
-        RegisterView.mail_validate(username, email)
+        RegisterView.mail_validate(self, username, email)
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super(RegisterView, self).form_valid(form)
@@ -95,6 +95,7 @@ class LoginView(FormView):
         password = form.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         login(self.request, user)
+        print(self.request.get_host())
         return super(LoginView, self).form_valid(form)
 
 def LogoutView(request):
