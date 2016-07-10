@@ -20,6 +20,7 @@ class UserProfile(models.Model):
     description    = models.TextField(blank=True, default="This is a description")
     role           = models.CharField(max_length=20, choices=ROLE_CHOICE, blank=True, default='common')
     tags           = ArrayField(models.CharField(max_length=100), blank=True, default=['tag1', 'tag2', 'tag3'])
+    activation_key = models.CharField(max_length=40, default="Not activated")
 
     def __str__(self):
         return (self.owner.username + "'s Profile")

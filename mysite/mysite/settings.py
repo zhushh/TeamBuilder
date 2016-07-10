@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'teamBuilder.apps.TeambuilderConfig',
-
+    'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -162,6 +162,18 @@ SWAGGER_SETTINGS = {
     'is_superuser': False,
 }
 
+# Mail settings
+# https://docs.djangoproject.com/en/1.9/topics/email/
+
+EMAIL_HOST = 'smtp.sina.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'teambuilder@sina.com'
+EMAIL_HOST_PASSWORD = 'admin123'
+EMAIL_SUBJECT_PREFIX = u'[Teambuilder团队]'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 local_db = 'postgres://postgres:admin123@localhost/TeamBuilderDB'
 db_from_env = dj_database_url.config(conn_max_age=500, default=local_db)
 DATABASES['default'].update(db_from_env)
+

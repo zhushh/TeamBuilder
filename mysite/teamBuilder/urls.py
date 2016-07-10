@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
     url(r'^logout/$', views.LogoutView, name='logout'),
     url(r'^login/$', views.LoginView.as_view(), name='login'),
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^user/activation/(?P<activation_key>\w+)/$', views.ActivationView),
+    url(r'^$', views.IndexView.as_view(), name='index')
 ]
