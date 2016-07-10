@@ -10,6 +10,7 @@ from .models import *
 from .forms import *
 import hashlib
 import random
+import re
 
 # Create your views here.
 
@@ -52,7 +53,7 @@ class RegisterView(FormView):
         profile.save()
 
         text_content = u'您好，' + username.decode('utf-8') + u'！恭喜您注册成功，请点击下面的链接激活您的账户：'
-        activation_url = 'localhost:3000/activation/' + activation_key
+        activation_url = 'localhost:3000/teambuilder/user/activation/' + activation_key
         html_content = u'<b>激活链接：</b><a href="'+ activation_url +'">' + activation_url + '</a>'
         send_mail(subject, text_content, from_email, [to_email], html_message=html_content)
 
@@ -74,14 +75,13 @@ def ActivationView(request, activation_key):
         try:
             user_profile = Profile.objects.get(activation_key=activation_key)
         except :
-            return render_to_response('teamBuilder/activation/wrong_url.html')
+            return render('teamBuilder/activation/wrong_url.html')
         user = user_profile.owner
         user.is_active = True
         user.save()
         user_profile.activation_key = u'ALREADY_ACTIVATED'
         user_profile.save()
-        login(request, user)
-        return HttpResponseRedirect(reverse('teamBuilder:index'))
+        return HttpResponseRedirect(reverse('teamBuilder:login'))
     else:
         return render_to_response('teamBuilder/activation/wrong_url.html')
 
