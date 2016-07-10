@@ -15,19 +15,20 @@ from django.contrib.postgres.fields import ArrayField
 # user.profile
 
 class Profile(models.Model):
-    ROLE_CHOICE   = (('common', 'common'),
+    ROLE_CHOICE    = (('common', 'common'),
                    ('special', 'special'))
 
-    owner         = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', null=True)
-    realname      = models.CharField(max_length=40, blank=True, default='张三')
-    phone         = models.CharField(max_length=40, blank=True, default='18800000000')
-    school        = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
-    department    = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
-    major         = models.CharField(max_length=40, blank=True, default='Software Engineering')
-    grade         = models.CharField(max_length=40, blank=True, default='2013')
-    description   = models.TextField(blank=True, default="This is a description")
-    role          = models.CharField(max_length=20, choices=ROLE_CHOICE, blank=True, default='common')
-    tags          = ArrayField(models.CharField(max_length=50), blank=True, default=['tag1', 'tag2', 'tag3'])
+    owner          = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', null=True)
+    realname       = models.CharField(max_length=40, blank=True, default='张三')
+    phone          = models.CharField(max_length=40, blank=True, default='18800000000')
+    school         = models.CharField(max_length=40, blank=True, default='Sun Yat-Sen University')
+    department     = models.CharField(max_length=40, blank=True, default='School of Data and Computer Science')
+    major          = models.CharField(max_length=40, blank=True, default='Software Engineering')
+    grade          = models.CharField(max_length=40, blank=True, default='2013')
+    description    = models.TextField(blank=True, default="This is a description")
+    role           = models.CharField(max_length=20, choices=ROLE_CHOICE, blank=True, default='common')
+    tags           = ArrayField(models.CharField(max_length=50), blank=True, default=['tag1', 'tag2', 'tag3'])
+    activation_key = models.CharField(max_length=40, default="Not activated")
 
     def __str__(self):
         return (self.owner.username + "'s Profile")
