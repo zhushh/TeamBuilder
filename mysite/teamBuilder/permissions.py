@@ -19,7 +19,7 @@ class IsPublisherOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         # print(request.method + " " + request.user.profile.role)
         if request.method == 'POST':
-            if request.user.profile.role == 'special':
+            if request.user.user_profile.role == 'special':
                 return True
             else:
                 return False

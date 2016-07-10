@@ -14,17 +14,15 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class UserProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users' profile to be viewed or edited
     """
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly, )
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -39,9 +37,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
                           IsPublisherOrReadOnly,
                           ]
 
-
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        user_profile = UserProfile.objects.filter(owner=self.request.user)[0]
+        serializer.save(owner=user_profile)
 
 class TeamViewSet(viewsets.ModelViewSet):
     """
@@ -52,9 +50,9 @@ class TeamViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly, )
 
-
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        user_profile = UserProfile.objects.filter(owner=self.request.user)
+        serializer.save(owner=user_profile[0], member_list=user_profile)
 
 class CommentViewSet(viewsets.ModelViewSet):
     """
@@ -66,5 +64,5 @@ class CommentViewSet(viewsets.ModelViewSet):
                           IsOwnerOrReadOnly, )
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
+        user_profile = UserProfile.objects.filter(owner=self.request.user)[0]
+        serializer.save(owner=user_profile)

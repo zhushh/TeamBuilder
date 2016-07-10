@@ -24,11 +24,10 @@ from . import views
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'profiles', views.ProfileViewSet)
+router.register(r'userprofiles', views.UserProfileViewSet)
 router.register(r'projects', views.ProjectViewSet)
 router.register(r'teams', views.TeamViewSet)
 router.register(r'comments', views.CommentViewSet)
-
 
 
 # Wire up our API using automatic URL routing.

@@ -24,16 +24,16 @@ class RegisterForm(forms.Form):
 
     password = forms.CharField(
         label=u'密码',
-        help_text=u'密码只有长度要求，长度为 6 ~ 18 。',
-        min_length=6,
-        max_length=18,
+        help_text=u'密码只有长度要求，长度为 8 ~ 20 。',
+        min_length=8,
+        max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
 
     confirm_password = forms.CharField(
         label=u'确认密码',
-        min_length=6,
-        max_length=18,
+        min_length=8,
+        max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
 
