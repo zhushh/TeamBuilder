@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate
 from django import forms
 
 class RegisterForm(forms.Form):
+    """
+    A form used as demo.
+    """
     username = forms.CharField(
         label=u'昵称',
         help_text=u'昵称可用于登录，不能包含空格和@字符。',

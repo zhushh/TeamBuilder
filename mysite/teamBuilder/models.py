@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-
 import django.utils.timezone as timezone
 from django.db import models
 from django.contrib.auth.models import User
@@ -13,7 +12,7 @@ class UserProfile(models.Model):
                       ('special', 'special'))
     realname       = models.CharField(max_length=100, blank=True, default='张三')
     phone          = models.CharField(max_length=100, blank=True, default='18800000000')
-    school         = models.CharField(max_length=100, blank=True, default='Sun Yat-Sen University')
+    school         = models.CharField(max_length=100, blank=True, default='Sun Yat-sen University')
     department     = models.CharField(max_length=100, blank=True, default='School of Data and Computer Science')
     major          = models.CharField(max_length=100, blank=True, default='Software Engineering')
     grade          = models.CharField(max_length=100, blank=True, default='2013')
@@ -26,13 +25,19 @@ class UserProfile(models.Model):
         return (self.owner.username + "'s Profile")
 
 def create_user_profile(sender, instance, created, **kwargs):
+    """
+    A hook function.
+    When a user is created, its UserProfile will be created automatically.
+    """
     if created:
-        print('Create Profile')
         UserProfile.objects.create(owner=instance)
 
 signals.post_save.connect(create_user_profile, sender=User)
 
 class Project(models.Model):
+    """
+    The project's title is unique.
+    """
     owner          = models.ForeignKey(UserProfile, related_name='project_published', on_delete=models.CASCADE, null=True)
     title          = models.CharField(max_length=100, blank=True, unique=True, default='Demo Project')
     description    = models.TextField(blank=True, default="Enter your description here")
