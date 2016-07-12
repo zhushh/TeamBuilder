@@ -2,22 +2,23 @@
 
 {% block content %}
     <div class="container">
-        <form>
+        <form action="/api/teams/" method="post">
             <div class="form-group">
+                <input id="teamID" type="text" name="teamID" style="display:none;">
                 <label for="teamname">Team name</label>
-                <input type="teamName" class="form-control" id="teamname" placeholder="team name">
+                <input type="text" name="teamName" class="form-control" id="teamname" placeholder="team name">
                 <div class="enter_team_msg_tags">
                     <label class="checkbox-inline">
-                      <input type="checkbox" id="tag1" value="option1"> tag1
+                      <input type="checkbox" id="tag1" name="tag1"> tag1
                     </label>
                     <label class="checkbox-inline">
-                      <input type="checkbox" id="tag2" value="option2"> tag2
+                      <input type="checkbox" id="tag2" name="tag2"> tag2
                     </label>
                     <label class="checkbox-inline">
-                      <input type="checkbox" id="tag3" value="option3"> tag3
+                      <input type="checkbox" id="tag3" name="tag3"> tag3
                     </label>
                 </div>
-                <textarea type="description" class="form-control" rows="3" id="desc" placeholder="team description"></textarea>
+                <textarea type="description" name="description" class="form-control" rows="3" id="desc" placeholder="team description"></textarea>
                 </br>
                 <button type="submit" class="btn btn-default">Submit</button>
             </div>

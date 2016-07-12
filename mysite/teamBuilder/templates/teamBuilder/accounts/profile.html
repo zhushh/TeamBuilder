@@ -1,57 +1,29 @@
 {% extends "index.html" %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" id="profile_outer">
         <img src="/static/images/touxiang.jpg" alt="avator" style="width:100px; height:100px;"/>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">personal infomation</h3>
           </div>
           <div class="panel-body">
-            <p>username: blablabla<p>
-            <p>email: blablabla<p>
-            <p>realname: blablabla<p>
-            <p>phone: blablabla<p>
-            <p>school: blablabla<p>
-            <p>department: blablabla<p>
-            <p>major: blablabla<p>
-            <p>grade: blablabla<p>
-            <p>description: blablabla<p>
+            <p>username: <span id="username"></span><p>
+            <p>email: <span id="email"></span><p>
+            <p>realname: <span id="realname"></span><p>
+            <p>phone: <span id="phone"></span><p>
+            <p>school: <span id="school"></span><p>
+            <p>department: <span id="department"></span><p>
+            <p>major: <span id="major"></span><p>
+            <p>grade: <span id="grade"></span><p>
+            <p>description: <span id="description"></span><p>
           </div>
         </div>
-        <div class="teams">
+        <div id="teams">
             <a class="btn btn-default" href="#" role="button">队伍1</a>
             <a class="btn btn-default" href="#" role="button">队伍2</a>
             <a class="btn btn-default" href="#" role="button">队伍3</a>
             <a class="btn btn-default" href="#" role="button">队伍4</a>
-        </div>
-        <div class="personal_info_comment panel panel-default" style="margin-top: 10px;">
-            <div class="panel-body">
-                <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
-                <div style="display:inline-block">
-                    <p>
-                        <span class="personal_info_comment_time">2016-7-7 12:22:22</span>
-                        </br>
-                        <span class="personal_info_comment_owner">owner</span>
-                        <span>:</span>
-                        <span class="personal_info_comment_content">content</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="personal_info_comment panel panel-default" style="margin-top: 10px;">
-            <div class="panel-body">
-                <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
-                <div style="display:inline-block">
-                    <p>
-                        <span class="personal_info_comment_time">2016-7-7 12:22:22</span>
-                        </br>
-                        <span class="personal_info_comment_owner">owner</span>
-                        <span>:</span>
-                        <span class="personal_info_comment_content">content</span>
-                    </p>
-                </div>
-            </div>
         </div>
         <div class="personal_info_comment panel panel-default" style="margin-top: 10px;">
             <div class="panel-body">
