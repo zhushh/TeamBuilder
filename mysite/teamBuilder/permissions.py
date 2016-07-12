@@ -3,9 +3,8 @@ from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to only allow owners of an object or admin to edit it.
     """
-
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
@@ -16,6 +15,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 
 class IsPublisherOrReadOnly(permissions.BasePermission):
+    """
+    Only those whose role is special can publish project.
+    """
     def has_permission(self, request, view):
         # print(request.method + " " + request.user.profile.role)
         if request.method == 'POST':

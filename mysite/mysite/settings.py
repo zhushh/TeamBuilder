@@ -86,13 +86,6 @@ DATABASES = {
 }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIkkR, 'db.sqlite3'),
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -157,7 +150,7 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'api_path': '/',
-    "api_version": '1.2',  # Specify your API's version
+    "api_version": '1.3',  # Specify your API's version
     'is_authenticated': False,
     'is_superuser': False,
 }

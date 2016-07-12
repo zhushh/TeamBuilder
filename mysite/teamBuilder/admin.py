@@ -6,6 +6,9 @@ from .models import *
 
 
 class UserProfileInline(admin.StackedInline):
+    """
+    UserProfile is displayed under User page.
+    """
     model = UserProfile
     can_delete = False
 

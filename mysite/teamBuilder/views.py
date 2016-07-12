@@ -41,7 +41,6 @@ class RegisterView(FormView):
     def mail_validate(self, username, to_email):
         subject = u'Teambuilder用户验证'
         from_email = 'teambuilder@sina.com'
-        
         # generate activation code
         salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]
         username = username.encode('utf-8')
