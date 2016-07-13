@@ -13,6 +13,8 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsUserOrReadOnly, )
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     """

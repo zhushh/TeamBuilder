@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     department     = models.CharField(max_length=100, blank=True, default='School of Data and Computer Science')
     major          = models.CharField(max_length=100, blank=True, default='Software Engineering')
     grade          = models.CharField(max_length=100, blank=True, default='2013')
-    description    = models.TextField(blank=True, default="This is a description")
+    description    = models.TextField(blank=True, default="Enter your personal description here.")
     role           = models.CharField(max_length=20, choices=ROLE_CHOICE, blank=True, default='common')
     tags           = ArrayField(models.CharField(max_length=100), blank=True, default=['tag1', 'tag2', 'tag3'])
     activation_key = models.CharField(max_length=40, default="Not activated")
