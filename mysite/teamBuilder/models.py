@@ -52,10 +52,10 @@ class Project(models.Model):
         return self.title
 
 class Team(models.Model):
-    owner          = models.OneToOneField(UserProfile, related_name='team_captain', on_delete=models.CASCADE, null=True)
+    owner          = models.ForeignKey(UserProfile, related_name='team_captain', on_delete=models.CASCADE, null=True)
     project        = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='team_enrolled')
     name           = models.CharField(max_length=100, blank=True, unique=True, default='Demo Team')
-    tags           = ArrayField(models.CharField(max_length=100), blank=True, default=['tag1', 'tag2', 'tag3'])
+    tags           = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=['tag1', 'tag2', 'tag3'])
     description    = models.TextField(default="Enter your description here")
     is_confirmed   = models.BooleanField(default=False)
     is_special     = models.BooleanField(default=False)

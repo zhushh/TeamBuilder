@@ -68,13 +68,21 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     def validate(self, data):
         """
         Impose project restriction on members.
-        Currently, only school requirement.
+        Currently, school requirement and no one can participate two teams in the same project.
         """
+        print(self.initial_data)
+        print(data)
         if data['is_special'] == False:
+            project_required_schools = data['project'].school
             for member in data['member_list']:
-                project_list = Project.objects.filter(school__contains=[member.school])
-                if data['project'] not in project_list:
-                    raise serializers.ValidationError("%s from %s is not qualified to participate in this project." % (member.realname, member.school))
+                # required schools
+                if member.school not in project_required_schools:
+                    raise serializers.ValidationError("%s from %s is not qualified to participate in this project. School requirement %s" % (member.realname, member.school, project_required_schools))
+                # join only one team in the same project
+                enrolled_team = Team.objects.filter(project=data['project'])
+                joined_team = enrolled_team.filter(member_list__owner__username=member.owner.username)
+                if (len(joined_team) >= 1 and joined_team[0] != data['project']) :
+                    raise serializers.ValidationError("%s has already participated in this project." % member.realname)
         return data
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
