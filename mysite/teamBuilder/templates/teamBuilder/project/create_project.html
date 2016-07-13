@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="col-md-3"></div>
+<div class="col-md-6 ">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label for="projectname" class="col-sm-2 control-label">Projectname</label>
+        <div class="col-sm-10">
+          <input type="title" class="form-control" id="projectname" placeholder="Title">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="projectowner" class="col-sm-2 control-label">owner</label>
+        <div class="col-sm-10">
+          <input type="owner" class="form-control" id="projectowner" placeholder="Owner">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="starttime3" class="col-sm-2 control-label">starttime</label>
+        <div class="col-sm-10">
+          <input type="starttime" class="form-control" id="starttime" placeholder="2016-07-10">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="overtime" class="col-sm-2 control-label">deadline</label>
+        <div class="col-sm-10">
+          <input type="deadline" class="form-control" id="overtime" placeholder="xxxx-xx-xx">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h1>description</h1>h1>
+        <textarea class= "form-control" rows="3"> </textarea>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">Publish</button>
+          <button type="submit" class="btn btn-primary">Cancel</button>
+        </div>
+      </div>
+    </form>
+</div>
+<div class="col-md-3"></div>
+{% endblock %}
