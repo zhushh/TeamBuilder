@@ -5,8 +5,8 @@ from teamBuilder.models import *
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('url', 'owner', 'realname', 'phone', 'school', 'department', 'major', 'grade', 'description', 'role', 'tags', 'project_published', 'team_captain', 'team_member', 'team_candidate', 'comment_received', 'comment_made')
-        read_only_fields = ('project_published', 'team_captain', 'comment_received', 'comment_made', 'team_member', 'team_candidate')
+        fields = ('url', 'owner', 'realname', 'phone', 'school', 'department', 'major', 'grade', 'description', 'role', 'tags', 'project_published', 'team_captain', 'team_member', 'team_candidate', 'msg_received', 'msg_sent')
+        read_only_fields = ('project_published', 'team_captain', 'msg_received', 'msg_sent', 'team_member', 'team_candidate')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -70,8 +70,6 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         Impose project restriction on members.
         Currently, school requirement and no one can participate two teams in the same project.
         """
-        print(self.initial_data)
-        print(data)
         if data['is_special'] == False:
             project_required_schools = data['project'].school
             for member in data['member_list']:
@@ -85,9 +83,19 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
                     raise serializers.ValidationError("%s has already participated in this project." % member.realname)
         return data
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Comment
+        model = Message
         fields = '__all__'
-        read_only_fields = ('owner',)
 
+    def validate(self, data):
+        """
+        Post time should be earlier than current time.
+        """
+        post_time = data['post_time']
+        current_time = timezone.now()
+        if post_time > current_time:
+            raise serializers.ValidationError("The post time is invalid")
+        if data['owner'] == data['sender']:
+            raise serializers.ValidationError("Receiver and Sender can't be the same guy.")
+        return data
