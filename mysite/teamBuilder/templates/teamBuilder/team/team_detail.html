@@ -1,0 +1,94 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">team infomation</h3>
+          </div>
+          <div class="panel-body">
+            <p>name:<span id="name"></span></p>
+            <p>description:<span id="description"></span></p>
+            <p>status:<span id="status"></span></p>
+            <p>project:<span id="project"></span></p>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">team apply //only for the team leader</h3>
+          </div>
+          <div class="panel-body">
+            <p>name:message</p>
+            <a class="btn btn-default" href="#" role="button">agree</a>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">team apply //only for the team leader</h3>
+          </div>
+          <div class="panel-body">
+            <p>name:message</p>
+            <a class="btn btn-default" href="#" role="button">agree</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                    <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
+                    <div style="display:inline-block">
+                        <p>membername</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                    <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
+                    <div style="display:inline-block">
+                        <p>membername</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                    <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
+                    <div style="display:inline-block">
+                        <p>membername</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                    <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
+                    <div style="display:inline-block">
+                        <p>membername</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                    <img src="/static/images/touxiang.jpg" alt="avator" style="width:55px;height:55px;display:inline-block;"/>
+                    <div style="display:inline-block">
+                        <p>membername</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <form>
+            <div class="form-group">
+                <textarea type="description" class="form-control" rows="3" id="msg" placeholder="leave a msg"></textarea>
+                </br>
+                <button type="submit" class="btn btn-default">apply for this team</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
