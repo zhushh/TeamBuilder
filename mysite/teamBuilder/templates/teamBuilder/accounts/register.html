@@ -3,7 +3,13 @@
 {% block content %}
 <div class="col-md-3"></div>
 <div class="col-md-6 ">
-    <form class="form-horizontal">
+
+  <form action="/contact/" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+  </form>
+
+<!--     <form class="form-horizontal">
       <div class="form-group">
         <label for="inputUsername3" class="col-sm-2 control-label">Username</label>
         <div class="col-sm-10">
@@ -37,7 +43,7 @@
           <button type="submit" class="btn btn-primary">Sign up</button>
         </div>
       </div>
-    </form>
+    </form> -->
 </div>
 <div class="col-md-3"></div>
 {% endblock %}
