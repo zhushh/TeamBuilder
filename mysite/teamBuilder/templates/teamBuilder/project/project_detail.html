@@ -1,25 +1,53 @@
-{% include 'index.html' %}
+{% extends "index.html" %}
 
 {% block content %}
-	<div class="col-md-7">
-		<ul>
-			<li style="display"><span>  项目名称 </span> ACM</li>
-			<li style="display"><span>项目发起者 </span> xx</li>
-			<li style="display"><span>开始时间 </span> </li>
-			<li style="display"><span>结束时间 </span> </li>
-			<li style="display"><span>发起组织 </span> </li>
-		</ul>
-	</div>
-		<div class="col-md-7">
-		<p class= "">
-		</p>
-	</div>
-	<div class="col-md-7">
-		<div class="col-sm-offset-2">
-			<button type="createteam" class="btn btn-primary">createteam</button>
+<div class="container" id="project_detail_container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">project infomation</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li style="display">Title:  <span id ="title"> ACM</span> </li>
+                <li style="display">Owner:  <span id ="owner" >xx</span>  </li>
+                <li style="display">Starttime <span > xxxx-xx-xx</span>   </li>
+                <li style="display">Deadline  <span id ="deadline"> xxxx-xx-xx</span> </li>
+                <li style="display">School  <span id ="school"> C </span> </li>
+            </ul>
          </div>
-	</div>
-		<div class="col-md-7">
-		</div>
-	</div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+        <a href="www.baidu.com" class="btn btn-primary" role="button">createteam</a>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">applied Team</h3>
+          </div>
+          <div class="panel-body">
+           
+                <dl class = "dl-horizontal">
+                    <dt class="list-group-item">Team1</dt>
+                     <dd id ="team1">a </dd>
+                     <dd> <button class="btn btn-primary">agree</button></dd>
+                    <dt class="list-group-item">Team2</dt>
+                     <dd id ="team2"> b</dd>
+                     <dd> <button class="btn btn-primary">agree</button></dd>
+                    <dt class="list-group-item">Team3</dt>
+                     <dd id ="team3"> c </dd>
+                     <dd> <button class="btn btn-primary">agree</button></dd>
+                    <dt class="list-group-item">Team4</dt>
+                     <dd id ="team4">d </dd>
+                     <dd> <button class="btn btn-primary">agree</button></dd>
+                </dl>
+          </div>
+    </div>
+</div>
 {% endblock %}

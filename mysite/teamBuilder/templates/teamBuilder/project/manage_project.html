@@ -1,19 +1,38 @@
 {% extends "index.html" %}
 
 {% block content %}
-		<div>
-			<p> 基本信息</p>
-
-		</div>
-		<a href="" class="btn btn-priamry">button</a>
-		 <div class="col-sm-offset-2 col-sm-10">
-            <a href="www.baidu.com" class="btn btn-primary" >create new project</a>
+  <div class="container" id="manage_project_container">
+    <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">project infomation</h3>
+          </div>
+          <div class="panel-body">
+            <p>name:<span id="name"></span></p>
+            <p>description:<span id="description"></span></p>
+            <p>status:<span id="status"></span></p>
+            <p>project:<span id="project"></span></p>
+          </div>
+        </div>
+    
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"></h3>
+          </div>
+          <div class="panel-body">
+            
+            <a class="btn btn-default" href="#" role="button">create New project</a>
+          </div>
         </div>
 
-		<div id="project-div">
-			  
-		</div>
+    <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">project owned</h3>
+          </div>
+          <div class="panel-body">
+            <div id="team_list">
 
-
-
+            </div>
+          </div>
+        </div>
+    </div>
 {% endblock %}

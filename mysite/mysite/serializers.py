@@ -28,25 +28,29 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
         """
         Be aware of that partial update is not available in this method.
+        Because auth.models.User's field has attr (required=True).
         """
         if validated_data['email'] != '':
             instance.email = validated_data['email']
         if validated_data['password'] != '':
             instance.set_password(validated_data['password'])
+        instance.save()
         return instance
 
-    def validate(self, data):
-        email = data['email']
-        password = data['password']
-        users = User.objects.filter(email=data['email'])
-        if len(users) != 0:
-            instance = self.instance
-            user = users[0]
-            if instance != user:
-                raise serializers.ValidationError("This email has been occupied")
-        if len(password) < 8 or len(password) > 20:
+    def validate_password(self, value):
+        if len(value) < 8 or len(value) > 20:
             raise serializers.ValidationError("The password should be at least 8 characters and at most 20 characters")
-        return data
+        return value
+
+    def validate_email(self, value):
+        users = User.objects.filter(email=value)
+        if len(users) != 0:
+            # email has been registered
+            user = users[0]
+            if self.instance is None or self.instance != user:
+                raise serializers.ValidationError("This email has been occupied")
+        return value
+
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -55,8 +59,19 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('team_enrolled', 'owner')
 
     def validate(self, data):
-        if data['min_num'] > data['max_num']:
-            raise serializers.ValidationError("minimum number must be less than maximum number ")
+        min_num = None
+        max_num = None
+
+        if self.instance is not None:
+            min_num = self.instance.min_num
+            max_num = self.instance.max_num
+        if 'min_num' in data:
+            min_num = data['min_num']
+        if 'max_num' in data:
+            max_num = data['max_num']
+
+        if min_num > max_num:
+            raise serializers.ValidationError("minimum number %s must be less than maximum number %s" % (min_num, max_num))
         return data
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
@@ -67,20 +82,31 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
     def validate(self, data):
         """
+        Supposing only members will be updated.
         Impose project restriction on members.
         Currently, school requirement and no one can participate two teams in the same project.
         """
-        if data['is_special'] == False:
+        project_required_schools = None
+        team_name = None
+        if self.instance is None:
             project_required_schools = data['project'].school
-            for member in data['member_list']:
-                # required schools
-                if member.school not in project_required_schools:
-                    raise serializers.ValidationError("%s from %s is not qualified to participate in this project. School requirement %s" % (member.realname, member.school, project_required_schools))
-                # join only one team in the same project
-                enrolled_team = Team.objects.filter(project=data['project'])
-                joined_team = enrolled_team.filter(member_list__owner__username=member.owner.username)
-                if (len(joined_team) >= 1 and joined_team[0] != data['project']) :
-                    raise serializers.ValidationError("%s has already participated in this project." % member.realname)
+            team_name = data['name']
+        else:
+            project_required_schools = self.initial_data.project.school
+            team_name = self.initial_data.name
+
+        if (self.instance is not None and self.instance.is_special == False) or (self.instance is None and data['is_special'] == False):
+
+            if 'member_list' in data:
+                for member in data['member_list']:
+                    # required schools
+                    if member.school not in project_required_schools:
+                        raise serializers.ValidationError("%s from %s is not qualified to participate in this project. School requirement %s" % (member.realname, member.school, project_required_schools))
+                    # join only one team in the same project
+                    enrolled_team = Team.objects.filter(project=data['project'])
+                    joined_team = enrolled_team.filter(member_list__owner__username=member.owner.username)
+                    if (len(joined_team) >= 1 and joined_team[0].name != self.team_name) :
+                        raise serializers.ValidationError("%s has already participated in this project." % member.realname)
         return data
 
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
@@ -88,14 +114,13 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
         model = Message
         fields = '__all__'
 
-    def validate(self, data):
-        """
-        Post time should be earlier than current time.
-        """
-        post_time = data['post_time']
+    def validate_post_time(self, value):
+        post_time = value
         current_time = timezone.now()
         if post_time > current_time:
             raise serializers.ValidationError("The post time is invalid")
+
+    def validate(self, data):
         if data['owner'] == data['sender']:
             raise serializers.ValidationError("Receiver and Sender can't be the same guy.")
         return data
