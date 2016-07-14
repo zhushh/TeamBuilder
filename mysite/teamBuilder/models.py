@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 
+
 # Create your models here.
 class UserProfile(models.Model):
     owner          = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE, null=True)
@@ -41,7 +42,6 @@ signals.post_save.connect(create_user_profile, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-
 
 class Project(models.Model):
     """

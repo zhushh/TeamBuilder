@@ -23,6 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return super(UserViewSet, self).get_object()
 
+
 class UserProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users' profile to be viewed or edited
