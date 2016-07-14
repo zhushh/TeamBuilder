@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
+from django.conf import settings
 from .models import *
 from .forms import *
 import hashlib
@@ -76,13 +77,25 @@ def ActivationView(request, activation_key):
         except :
             return render('teamBuilder/activation/wrong_url.html')
         user = user_profile.owner
-        user.is_active = True
-        user.save()
-        user_profile.activation_key = u'ALREADY_ACTIVATED'
-        user_profile.save()
-        return HttpResponseRedirect(reverse('teamBuilder:login'))
+
+        # check time expired
+        expiration_date = datetime.timedelta(seconds=settings.EXPIRATION_TIME_DELTA)
+        if (user_profile.activation_key == u'ALREADY_ACTIVATED' or user.date_joined + expiration_date <= datetime.datetime.now()):
+            context = {
+                err_msg: '该验证地址已过期'
+            }
+            return render('teambuilder/activation/wrong.url')
+        else:
+            user.is_active = True
+            user.save()
+            user_profile.activation_key = u'ALREADY_ACTIVATED'
+            user_profile.save()
+            return HttpResponseRedirect(reverse('teamBuilder:login'))
     else:
-        return render_to_response('teamBuilder/activation/wrong_url.html')
+        context = {
+            err_msg: '错误的验证地址'
+        }
+        return render(request, 'teamBuilder/activation/url.html')
 
 class LoginView(FormView):
     template_name = 'teamBuilder/accounts/login.html'
