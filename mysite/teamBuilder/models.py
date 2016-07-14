@@ -4,7 +4,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import signals
+from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.conf import settings
+
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -34,6 +37,11 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(owner=instance)
 
 signals.post_save.connect(create_user_profile, sender=User)
+
+@receiver(signals.post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class Project(models.Model):
     """
