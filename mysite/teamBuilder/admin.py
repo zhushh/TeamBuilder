@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from .models import *
 # Register your models here.
 
-
 class UserProfileInline(admin.StackedInline):
     """
     UserProfile is displayed under User page.
@@ -24,11 +23,9 @@ class ProjectAdmin(admin.ModelAdmin):
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'owner', 'project')
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'content', 'time', 'commentator')
-
-
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('owner', 'msg_type', 'content', 'post_time', 'sender')
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

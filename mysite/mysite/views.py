@@ -13,6 +13,8 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsUserOrReadOnly, )
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     """
@@ -54,12 +56,12 @@ class TeamViewSet(viewsets.ModelViewSet):
         user_profile = UserProfile.objects.filter(owner=self.request.user)
         serializer.save(owner=user_profile[0], member_list=user_profile)
 
-class CommentViewSet(viewsets.ModelViewSet):
+class MessageViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows comments to be viewed or edited
     """
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly, )
 

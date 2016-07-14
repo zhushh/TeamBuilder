@@ -7,7 +7,7 @@ from django.db.models import signals
 
 # Create your models here.
 class UserProfile(models.Model):
-    owner           = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE, null=True)
+    owner          = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE, null=True)
     ROLE_CHOICE    = (('common', 'common'),
                       ('special', 'special'))
     realname       = models.CharField(max_length=100, blank=True, default='张三')
@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     department     = models.CharField(max_length=100, blank=True, default='School of Data and Computer Science')
     major          = models.CharField(max_length=100, blank=True, default='Software Engineering')
     grade          = models.CharField(max_length=100, blank=True, default='2013')
-    description    = models.TextField(blank=True, default="This is a description")
+    description    = models.TextField(blank=True, default="Enter your personal description here.")
     role           = models.CharField(max_length=20, choices=ROLE_CHOICE, blank=True, default='common')
     tags           = ArrayField(models.CharField(max_length=100), blank=True, default=['tag1', 'tag2', 'tag3'])
     activation_key = models.CharField(max_length=40, default="Not activated")
@@ -52,10 +52,10 @@ class Project(models.Model):
         return self.title
 
 class Team(models.Model):
-    owner          = models.OneToOneField(UserProfile, related_name='team_captain', on_delete=models.CASCADE, null=True)
+    owner          = models.ForeignKey(UserProfile, related_name='team_captain', on_delete=models.CASCADE, null=True)
     project        = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='team_enrolled')
     name           = models.CharField(max_length=100, blank=True, unique=True, default='Demo Team')
-    tags           = ArrayField(models.CharField(max_length=100), blank=True, default=['tag1', 'tag2', 'tag3'])
+    tags           = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=['tag1', 'tag2', 'tag3'])
     description    = models.TextField(default="Enter your description here")
     is_confirmed   = models.BooleanField(default=False)
     is_special     = models.BooleanField(default=False)
@@ -65,11 +65,20 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
-class Comment(models.Model):
-    owner          = models.ForeignKey(UserProfile, related_name='comment_received', on_delete=models.CASCADE, null=True)
-    content        = models.TextField(max_length=200, default="Enter your comment here")
-    time           = models.DateTimeField('publish_time', default=timezone.now, null=True)
-    commentator    = models.ForeignKey(UserProfile, related_name='comment_made', on_delete=models.CASCADE, null=True)
+class Message(models.Model):
+    """
+    Define all kind of communication between users.
+    Owner is receiver.
+    """
+    MSG_CHOICE = (
+        ('COMMENT', 'Comment'),
+        ('APPLY', 'Apply'),
+    )
+    owner     = models.ForeignKey(UserProfile, related_name='msg_received', on_delete=models.CASCADE, null=True)
+    msg_type  = models.CharField(max_length=30, choices=MSG_CHOICE, default=(MSG_CHOICE[0]))
+    content   = models.TextField(max_length=300, default="Enter your message here")
+    post_time = models.DateTimeField('publish_time', default=timezone.now, null=True)
+    sender    = models.ForeignKey(UserProfile, related_name='msg_sent', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return (self.owner.realname + " " + self.content + " " + str(self.time))
+        return (self.owner.realname + " " + self.msg_type + " " + self.content + " " + str(self.post_time))

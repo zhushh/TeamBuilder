@@ -15,8 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
-
 from django.contrib.auth.models import User
 from rest_framework import routers
 from . import views
@@ -27,7 +25,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'userprofiles', views.UserProfileViewSet)
 router.register(r'projects', views.ProjectViewSet)
 router.register(r'teams', views.TeamViewSet)
-router.register(r'comments', views.CommentViewSet)
+router.register(r'messages', views.MessageViewSet)
 
 
 # Wire up our API using automatic URL routing.
