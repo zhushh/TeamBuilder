@@ -1,9 +1,9 @@
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import *
 from mysite.serializers import *
 from teamBuilder.models import *
-from django.contrib.auth.models import User
 from teamBuilder.permissions import *
 # Create your views here.
 
@@ -13,8 +13,15 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsUserOrReadOnly, )
+    permission_classes = (IsUserOrReadOnly, )
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+
+        if pk == "current":
+            return self.request.user
+
+        return super(UserViewSet, self).get_object()
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     """
