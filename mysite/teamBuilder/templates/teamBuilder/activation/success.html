@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% block content %}
+    <div class='activation-success'>
+        <p> {{ msg }}</p>
+    </div>
+    <script type="text/javascript" src="{% static 'teamBuilder/js/redirect.js' %}"></script>
+{% endblock %}
