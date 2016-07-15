@@ -34,7 +34,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     When a user is created, its UserProfile will be created automatically.
     """
     if created:
-        UserProfile.objects.create(owner=instance)
+        UserProfile.objects.create(owner=instance, role='special')
 
 signals.post_save.connect(create_user_profile, sender=User)
 
