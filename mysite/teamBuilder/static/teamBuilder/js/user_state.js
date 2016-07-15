@@ -12,7 +12,7 @@ if (window.sessionStorage.token) {
 $('.logout').click(function(e) {
 	e.preventDefault();
 	window.sessionStorage.clear();
-	window.location.href = '/teambuilder/logout'
+	window.location.href = '/teambuilder/logout';
 });
 
 getCurrentUser = function(callback) {
