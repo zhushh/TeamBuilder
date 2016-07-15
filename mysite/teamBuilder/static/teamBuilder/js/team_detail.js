@@ -21,8 +21,8 @@ $.get('/api/teams/' + teamID, function(result) {
 		$.get(candidate, function(userprofile) {
 			var outer = $("#team_detail_container");
 			$("<div class=\"panel panel-default\"><div class=\"panel-heading\"><h3 class=\"panel-title\">team apply</h3></div><div class=\"panel-body\"><p>"
-				+ userprofile.realname + ":message</p><a class=\"btn btn-default\" role=\"button\">agree</a></div></div>").appendTo(outer);
-			// 问题 message去哪拿？
+				+ userprofile.realname + ":message</p><a class=\"btn btn-default agree-button\" role=\"button\" url=\""
+				+ candidate + "\">agree</a></div></div>").appendTo(outer);
 		});
 	}
 	for (member of result.member_list) {
@@ -32,9 +32,30 @@ $.get('/api/teams/' + teamID, function(result) {
 				+ userprofile.realname + "</p></div></div></div></div>").appendTo(outer);
 		});
 	}
+	if (!result.member_list){
+		$("#member_list").css("display", "none");
+	}
 });
 
 $("#form_apply").attr("action", "/api/teams/" + teamID + "/join_apply");
 
 $("#userId").val(sessionStorage.id);
-// 问题 怎么拿userid？
+
+$("#appy_button").click(function(){
+	$.post("/api/teams/" + teamID + "/join_apply", fcuntion(result) {
+		alert("申请成功！");
+		location.reload();
+	});
+});
+
+$(".agree-button").click(function(){
+	$this = $(this);
+	$.get($this.attr("url"), function(result) {
+		$.get(result.owner, function(result) {
+			$.post("/api/teams/" + teamID + "/join_accept", {"userId": result._id}, function(result) {
+				alert("success!");
+				location.reload();
+			});
+		});
+	});
+});
