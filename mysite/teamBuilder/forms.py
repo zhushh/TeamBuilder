@@ -28,16 +28,16 @@ class RegisterForm(forms.Form):
 
     password = forms.CharField(
         label=u'密码',
-        help_text=u'密码只有长度要求，长度为 6 ~ 18 。',
-        min_length=6,
-        max_length=18,
+        help_text=u'密码只有长度要求，长度为 8 ~ 20 。',
+        min_length=8,
+        max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
 
     confirm_password = forms.CharField(
         label=u'确认密码',
-        min_length=6,
-        max_length=18,
+        min_length=8,
+        max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
 
@@ -71,8 +71,6 @@ class RegisterForm(forms.Form):
         password = self.cleaned_data['password']
         user = User.objects.create_user(username, email, password, is_active=False)
         user.save()
-        profile = Profile.objects.create(owner=user)
-        profile.save()
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -83,8 +81,8 @@ class LoginForm(forms.Form):
     )
     password = forms.CharField(
         label='Password',
-        min_length=6,
-        max_length=18,
+        min_length=8,
+        max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
     )
 
