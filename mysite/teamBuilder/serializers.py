@@ -88,25 +88,42 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         """
         project_required_schools = None
         team_name = None
+        project = None
+        is_confirmed = None
         if self.instance is None:
-            project_required_schools = data['project'].school
+            project = data['project']
+            project_required_schools = project.school
             team_name = data['name']
+            is_confirmed = data['is_confirmed']
         else:
-            project_required_schools = self.initial_data.project.school
-            team_name = self.initial_data.name
+            project = self.instance.project
+            project_required_schools = project.school
+            team_name = self.instance.name
+            if 'is_confirmed' in data:
+                is_confirmed = data['is_confirmed']
+            else:
+                is_confirmed = self.instance.is_confirmed
+
 
         if (self.instance is not None and self.instance.is_special == False) or (self.instance is None and data['is_special'] == False):
-
             if 'member_list' in data:
+                # check number restriction
+                if is_confirmed:
+                    max_num = project.max_num
+                    min_num = project.min_num
+                    if max_num < len(data['member_list']):
+                        raise serializers.ValidationError("Too many team members")
+                    if min_num > len(data['member_list']):
+                        raise serializers.ValidationError("You need more team members")
                 for member in data['member_list']:
                     # required schools
                     if member.school not in project_required_schools:
-                        raise serializers.ValidationError("%s from %s is not qualified to participate in this project. School requirement %s" % (member.realname, member.school, project_required_schools))
+                        raise serializers.ValidationError("%s from %s is not qualified to participate in this project. School requirement %s" % (member.owner.username, member.school, project_required_schools))
                     # join only one team in the same project
                     enrolled_team = Team.objects.filter(project=data['project'])
                     joined_team = enrolled_team.filter(member_list__owner__username=member.owner.username)
-                    if (len(joined_team) >= 1 and joined_team[0].name != self.team_name) :
-                        raise serializers.ValidationError("%s has already participated in this project." % member.realname)
+                    if (len(joined_team) >= 1 and joined_team[0].name != team_name) :
+                        raise serializers.ValidationError("%s has already participated in this project." % member.owner.username)
         return data
 
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
