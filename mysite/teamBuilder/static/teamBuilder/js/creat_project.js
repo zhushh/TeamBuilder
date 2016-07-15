@@ -1,0 +1,1 @@
+('#projectID').val(window.location.href.split("/").pop());
