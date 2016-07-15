@@ -6,9 +6,12 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
+from django.shortcuts import render
 from django.conf import settings
+from django.utils import timezone
 from .models import *
 from .forms import *
+import datetime
 import hashlib
 import random
 import re
@@ -48,14 +51,14 @@ class RegisterView(FormView):
         code = salt.encode('utf-8') + username
         activation_key = hashlib.sha1(code).hexdigest()
         user = User.objects.get(username=username)
-        profile = user.profile
+        profile = user.user_profile
         profile.activation_key = activation_key
         profile.save()
 
-        text_content = u'您好，' + username.decode('utf-8') + u'！恭喜您注册成功，请点击下面的链接激活您的账户：'
+        text_content = u'<p>您好，' + username.decode('utf-8') + u'！恭喜您注册成功，请点击下面的链接激活您的账户：</p>'
         activation_url = self.request.get_host() + '/teambuilder/user/activation/' + activation_key
-        html_content = u'<b>激活链接：</b><a href="'+ activation_url +'">' + activation_url + '</a>'
-        send_mail(subject, text_content, from_email, [to_email], html_message=html_content)
+        html_content = text_content + u'<b>激活链接：</b><a href="'+ activation_url +'">' + activation_url + '</a>'
+        send_mail(subject, '', from_email, [to_email], html_message=html_content)
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -73,18 +76,22 @@ def ActivationView(request, activation_key):
     SHA_RE = re.compile('^[a-f0-9]{40}$')
     if SHA_RE.search(activation_key):
         try:
-            user_profile = Profile.objects.get(activation_key=activation_key)
+            user_profile = UserProfile.objects.get(activation_key=activation_key)
         except :
-            return render('teamBuilder/activation/wrong_url.html')
+            context = {
+                'err_msg': '无效的验证地址'
+            }
+            return render(request, 'teamBuilder/activation/msg.html', context)
         user = user_profile.owner
 
         # check time expired
         expiration_date = datetime.timedelta(seconds=settings.EXPIRATION_TIME_DELTA)
-        if (user_profile.activation_key == u'ALREADY_ACTIVATED' or user.date_joined + expiration_date <= datetime.datetime.now()):
+        if (user.date_joined + expiration_date <= timezone.now()):
             context = {
-                err_msg: '该验证地址已过期'
+                'err_msg': '该验证地址已过期，请重新注册'
             }
-            return render('teambuilder/activation/wrong.url')
+            user.delete()
+            return render(request, 'teambuilder/activation/msg.html', context)
         else:
             user.is_active = True
             user.save()
@@ -93,9 +100,9 @@ def ActivationView(request, activation_key):
             return HttpResponseRedirect(reverse('teamBuilder:login'))
     else:
         context = {
-            err_msg: '错误的验证地址'
+            'err_msg': '错误的验证地址'
         }
-        return render(request, 'teamBuilder/activation/url.html')
+        return render(request, 'teamBuilder/activation/msg.html', context)
 
 class LoginView(FormView):
     template_name = 'teamBuilder/accounts/login.html'

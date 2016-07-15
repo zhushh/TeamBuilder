@@ -71,8 +71,6 @@ class RegisterForm(forms.Form):
         password = self.cleaned_data['password']
         user = User.objects.create_user(username, email, password, is_active=False)
         user.save()
-        profile = Profile.objects.create(owner=user)
-        profile.save()
 
 class LoginForm(forms.Form):
     username = forms.CharField(
