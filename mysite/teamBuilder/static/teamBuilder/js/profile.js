@@ -28,12 +28,15 @@ $.get("/api/users/" + userID, function(result){
 
 
         var outer = $("#teams");
-        for (team in profileResult.team_member.concat(result.captain)) {
+        for (team of profileResult.team_candidate) {
             $.get(team, function(fuck){
                 var name = fuck.name;
+                var teamId = fuck.url;
+                teamId = teamId.split('/');
+                teamId = teamId[teamId.length - 2];
                 $("<a class=\"btn btn-default\" href=\""
-                    + team + "\" role=\"button\">"
-                    + name +"</a>").appendTo(outer);
+                    + '/teambuilder/team/' + teamId + "\" role=\"button\">"
+                    + '队伍: ' + name +"</a>").appendTo(outer);
             });
         }
     });
