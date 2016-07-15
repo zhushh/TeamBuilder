@@ -70,7 +70,11 @@ class RegisterView(FormView):
         RegisterView.mail_validate(self, username, email)
         user = authenticate(username=username, password=password)
         login(self.request, user)
-        return super(RegisterView, self).form_valid(form)
+        # return super(RegisterView, self).form_valid(form)
+        context = {
+            'err_msg': '注册成功，请通过您的邮箱收到的验证邮件激活您的账号'
+        }
+        return render(self.request, 'teamBuilder/activation/msg.html', context)
 
 def ActivationView(request, activation_key):
     SHA_RE = re.compile('^[a-f0-9]{40}$')
@@ -97,7 +101,11 @@ def ActivationView(request, activation_key):
             user.save()
             user_profile.activation_key = u'ALREADY_ACTIVATED'
             user_profile.save()
-            return HttpResponseRedirect(reverse('teamBuilder:login'))
+            # return HttpResponseRedirect(reverse('teamBuilder:login'))
+            context = {
+                'msg': '验证成功，5秒后跳转到登录页面'
+            }
+            return render(request, 'teambuilder/activation/success.html', context)
     else:
         context = {
             'err_msg': '错误的验证地址'

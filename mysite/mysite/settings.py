@@ -169,7 +169,7 @@ EMAIL_HOST_PASSWORD = 'admin123'
 EMAIL_SUBJECT_PREFIX = u'[Teambuilder团队]'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EXPIRATION_TIME_DELTA = 1
+EXPIRATION_TIME_DELTA = 1800
 
 local_db = 'postgres://postgres:admin123@localhost/TeamBuilderDB'
 db_from_env = dj_database_url.config(conn_max_age=500, default=local_db)
