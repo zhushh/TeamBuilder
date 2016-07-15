@@ -1,38 +1,81 @@
 {% extends "index.html" %}
 
+
 {% block content %}
-  <div class="container" id="manage_project_container">
-    <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">project infomation</h3>
-          </div>
-          <div class="panel-body">
-            <p>name:<span id="name"></span></p>
-            <p>description:<span id="description"></span></p>
-            <p>status:<span id="status"></span></p>
-            <p>project:<span id="project"></span></p>
-          </div>
-        </div>
+	<div class="container" id="manage_project_container">
 
+		<div class="panel panel-default">
+          	<div class="panel-heading">
+           		<h3 class="panel-title">basic infomation</h3>
+          	</div>
+          	<div class="panel-body">
+            	<p>description:<span id="description"></span></p>
+          	</div>
+        </div>
+		
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title"></h3>
-          </div>
-          <div class="panel-body">
-            
-            <a class="btn btn-default" href="#" role="button">create New project</a>
-          </div>
-        </div>
-
-    <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">project owned</h3>
-          </div>
-          <div class="panel-body">
-            <div id="team_list">
-
+            <div class="panel-heading">
+                <h3 class="panel-title"></h3>
             </div>
+            <div class="panel-body">
+           		<a class="btn btn-default" href="#" role="button">create New project</a>
+          	</div>
+        </div>
+
+		<div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">project published</h3>
+          </div>
+          <div class="panel-body">
+          	<div class="row" id="project_list">
+          	
+           		<div class="col-lg-2 column ui-sortable">
+	           		<a href="#">
+	           			<div class="panel panel-default" style="margin-top: 10px;">
+	           				<h2 id ="projectid" style="display:inline-block">project1</h2>
+	           				<div class="panel-body">
+	           					<div style="display:inline-block">
+           						   <p id = "title">ACM</p>
+           						   <p id = "deadline">2016-07-15</p>
+           						   <p id = "school">C</p>
+           						</div>
+           					</div>
+           				</div>
+           			</a>
+           		</div>
+				<div class="col-lg-2 column ui-sortable">
+           			<a href="#">
+	           			<div class="panel panel-default" style="margin-top: 10px;">
+	           				<h2 id ="projectid" style="display:inline-block">project1</h2>
+	           				<div class="panel-body">
+	           					<div style="display:inline-block">
+           						   <p id = "title">CNN</p>
+           						   <p id = "deadline">2016-07-15</p>
+           						   <p id = "school">D</p>
+           						</div>
+           					</div>
+           				</div>
+           			</a>
+           		</div>
+           		<div class="col-lg-2 column ui-sortable">
+           			<a href="#">
+	           			<div class="panel panel-default" style="margin-top: 10px;">
+	           				<h2 id ="projectid" style="display:inline-block">project1</h2>
+	           				<div class="panel-body">
+	           					<div style="display:inline-block">
+           						   <p id = "title">CNN</p>
+           						   <p id = "deadline">2016-07-15</p>
+           						   <p id = "school">D</p>
+           						</div>
+           					</div>
+           				</div>
+           			</a>
+           		</div>
+           		
+           	</div>
           </div>
         </div>
+
+
     </div>
 {% endblock %}
