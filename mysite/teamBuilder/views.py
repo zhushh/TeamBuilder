@@ -1,11 +1,13 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.views import generic
-from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.core.mail import send_mail, BadHeaderError, EmailMultiAlternatives
+from rest_framework import viewsets, filters
+from rest_framework.permissions import *
+from .serializers import *
+from .permissions import *
 from .models import *
 from .forms import *
 import hashlib
@@ -14,26 +16,28 @@ import re
 
 # Create your views here.
 
-class UserProfileView(TemplateView):
+class UserProfileView(generic.TemplateView):
 	template_name = 'teamBuilder/accounts/profile.html'
 
-class TeamDetailView(TemplateView):
+class TeamDetailView(generic.TemplateView):
 	template_name = 'teamBuilder/team/team_detail.html'
 
-class ProjectCreateView(TemplateView):
+class ProjectCreateView(generic.TemplateView):
 	template_name = 'teamBuilder/project/create_project.html'
 
-class TeamCreateView(TemplateView):
+class TeamCreateView(generic.TemplateView):
 	template_name = 'teamBuilder/team/create_team.html'
 
-class ProjectManageView(TemplateView):
+class ProjectManageView(generic.TemplateView):
 	template_name = 'teamBuilder/project/manage_project.html'
 
-class ProjectDetailView(TemplateView):
+class ProjectDetailView(generic.TemplateView):
 	template_name = 'teamBuilder/project/project_detail.html'
 
+class IndexView(generic.TemplateView):
+    template_name = 'teamBuilder/index.html'
 
-class RegisterView(FormView):
+class RegisterView(generic.edit.FormView):
     template_name = 'teamBuilder/accounts/register.html'
     form_class = RegisterForm
     success_url = reverse_lazy('teamBuilder:index')
@@ -84,7 +88,7 @@ def ActivationView(request, activation_key):
     else:
         return render_to_response('teamBuilder/activation/wrong_url.html')
 
-class LoginView(FormView):
+class LoginView(generic.edit.FormView):
     template_name = 'teamBuilder/accounts/login.html'
     form_class = LoginForm
     success_url = reverse_lazy('teamBuilder:index')
@@ -101,5 +105,75 @@ def LogoutView(request):
     logout(request)
     return HttpResponseRedirect(reverse('teamBuilder:index'))
 
-class IndexView(generic.TemplateView):
-    template_name = 'teamBuilder/index.html'
+
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsUserOrReadOnly, )
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+
+        if pk == "current":
+            return self.request.user
+
+        return super(UserViewSet, self).get_object()
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users' profile to be viewed or edited
+    """
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows projects to be viewed or edited
+    """
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title',)
+    permission_classes = [IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,
+                          IsPublisherOrReadOnly,
+                          ]
+
+    def perform_create(self, serializer):
+        user_profile = UserProfile.objects.filter(owner=self.request.user)[0]
+        serializer.save(owner=user_profile)
+
+class TeamViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows teams to be viewed or edited
+    """
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        user_profile = UserProfile.objects.filter(owner=self.request.user)
+        serializer.save(owner=user_profile[0], member_list=user_profile)
+
+class MessageViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows comments to be viewed or edited
+    """
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly, )
+
+    def perform_create(self, serializer):
+        user_profile = UserProfile.objects.filter(owner=self.request.user)[0]
+        serializer.save(owner=user_profile)

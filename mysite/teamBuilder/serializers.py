@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from teamBuilder.models import *
+from .models import *
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
