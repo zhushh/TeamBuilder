@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'api_path': '/',
-    "api_version": '1.3',  # Specify your API's version
+    "api_version": '1.4',  # Specify your API's version
     'is_authenticated': False,
     'is_superuser': False,
 }
