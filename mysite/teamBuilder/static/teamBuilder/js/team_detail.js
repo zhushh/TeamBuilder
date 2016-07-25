@@ -119,3 +119,33 @@ $("#apply_button").click(function(e){
 	});
 });
 
+$(".info").click(function(e) {
+	$(this).css("display", "none");
+	$(this).siblings("input").css("display", "block");
+	$(this).siblings("button").css("display", "block");
+});
+
+$(".update-button").click(function(e) {
+	var key = $(this).siblings("span").attr("id");
+	var value = $(this).siblings("input").val();
+	if (value == "") {
+		alert("不能为空");
+	} else {
+		$.ajax({
+    		url: "/api/teams/" + teamID + '/', 
+    		success: function(result) {
+    		  console.log(result);
+    		  alert("更新成功！");
+    		  location.reload();
+    		},
+    		data: JSON.stringify({
+                key: value,
+    		}),
+            headers: {
+                'Authorization': 'Token ' + window.sessionStorage.token
+            },
+            method: 'PATCH',
+            contentType: 'application/json'
+    	});
+	}
+});
