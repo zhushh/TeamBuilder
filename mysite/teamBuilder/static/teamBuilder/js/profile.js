@@ -1,9 +1,12 @@
 var userID = window.location.href.split("/").pop();
 var msgs = null;
+var profileId;
 
 $.get("/api/users/" + userID, function(result){
     $("#username").html(result.username);
     $("#email").html(result.email);
+    profileId = result.user_profile.split('/');
+    profileId = profileId[profileId.length - 2];
     $.get(result.user_profile, function(profileResult){
         $("#realname").html(profileResult.realname);
         $("#phone").html(profileResult.phone);
@@ -54,21 +57,22 @@ $(".update-button").click(function(e) {
     if (value == "") {
         alert("不能为空");
     } else {
+        var data = {};
+        data[key] = value;
         $.ajax({
-            url: "/api/userprofiles/" + userID + '/', 
+            url: "/api/userprofiles/" + profileId + '/', 
             success: function(result) {
               console.log(result);
               alert("更新成功！");
               location.reload();
             },
-            data: JSON.stringify({
-                key: value,
-            }),
+            data: data,
             headers: {
                 'Authorization': 'Token ' + window.sessionStorage.token
             },
             method: 'PATCH',
-            contentType: 'application/json'
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json'
         });
     }
 });

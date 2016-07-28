@@ -131,6 +131,8 @@ $(".update-button").click(function(e) {
 	if (value == "") {
 		alert("不能为空");
 	} else {
+        var data = {};
+        data[key] = value;
 		$.ajax({
     		url: "/api/teams/" + teamID + '/', 
     		success: function(result) {
@@ -138,9 +140,7 @@ $(".update-button").click(function(e) {
     		  alert("更新成功！");
     		  location.reload();
     		},
-    		data: JSON.stringify({
-                key: value,
-    		}),
+    		data: JSON.stringify(data),
             headers: {
                 'Authorization': 'Token ' + window.sessionStorage.token
             },
