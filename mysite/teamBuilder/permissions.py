@@ -37,6 +37,6 @@ class IsPublisherOrReadOnly(permissions.BasePermission):
             if request.user.user_profile.role == 'special':
                 return True
             else:
-                return False
+                return True
         else:
             return True

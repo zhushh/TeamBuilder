@@ -17,9 +17,9 @@ $('#create_project').click(function(e) {
     var data = {
             title: $('#title').val(),
             description: $('#description')[0].value,
-            school:$('#school').val(),
-            department:$('#department').val(),
-            major:$('#major').val(),
+            school: [$('#school').val()],
+            department: [$('#department').val()],
+            major: [$('#major').val()],
             min_num:$('#min_num').val(),
             max_num:$('#max_num').val()
        
