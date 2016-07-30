@@ -49,20 +49,31 @@ $.get('/api/teams/' + teamID, function(result) {
                 var member_list = sessionStorage.member_list;
                 member_list = member_list.split(',');
                 member_list.push(url);
-                debugger
+                // debugger
                 var candidate_list = sessionStorage.candidate_list;
                 candidate_list = candidate_list.split(',');
                 candidate_list.remove(url);
+                for (var i = 0; i < member_list.length; ++i) {
+                    if (member_list[i] == '') member_list.remove(i);
+                }
             	$.ajax({
             		url: "/api/teams/" + teamID + '/', 
             		success: function(result) {
-            		  console.log(result);
-            		  alert("申请成功！");
+            		  // console.log(result);
+            		  alert("同意成功！");
             		  location.reload();
             		},
+                    error: function(response) {
+                      var err = JSON.parse(response.responseText);
+                      console.log(err);
+                      if (err.non_field_errors) {
+                        alert(err.non_field_errors[0]);
+                      }
+                    },
             		data: JSON.stringify({
                         candidate_list: candidate_list,
-                        member_list: member_list
+                        member_list: member_list,
+                        project: result.project
             		}),
                     headers: {
                         'Authorization': 'Token ' + window.sessionStorage.token
@@ -76,7 +87,6 @@ $.get('/api/teams/' + teamID, function(result) {
 	sequence = 0;
 	for (member of member_list) {
 		$.get(member, function(userprofile) {
-			console.log(userprofile);
 			var outer = $('#member_list');
 			$("<div class=\"col-md-3\"><div class=\"panel panel-default\" style=\"margin-top: 10px;\"><div class=\"panel-body\"><img src=\"/static/teamBuilder/images/touxiang.jpg\" alt=\"avator\" style=\"width:55px;height:55px;display:inline-block;\"/><div style=\"display:inline-block\"><p>"
 				+ userprofile.realname + "</p></div></div></div></div>").appendTo(outer);
@@ -98,13 +108,13 @@ $("#apply_button").click(function(e){
     var candidate_list = sessionStorage.candidate_list;
     if (typeof candidate_list == 'string') {
     	candidate_list = candidate_list.split(',');
-    	console.log(candidate_list);
+    	// console.log(candidate_list);
     	candidate_list.push(url);
     }
 	$.ajax({
 		url: "/api/teams/" + teamID + '/', 
 		success: function(result) {
-		  console.log(result);
+		  // console.log(result);
 		  alert("申请成功！");
 		  // location.reload();
 		},
