@@ -7,13 +7,27 @@
             <h3 class="panel-title">project infomation</h3>
         </div>
         <div class="panel-body">
+            <p>
+                Title: <span id="title" class="info" style="cursor:pointer;"> ACM</span>
+                <input type="text" class="form-control" placeholder="title" style="display:none;">
+                <button type="button" class="btn btn-primary update-button" style="margin-top: 8px; display:none;">更新</button>
+            <p>
+            <p>
+                Owner: <span id="owner";">xx</span>
+            <p>
+            <p>
+                School: <span id="school" class="info" style="cursor:pointer;">Software Engineer School</span>
+                <input type="text" class="form-control" placeholder="school" style="display:none;">
+                <button type="button" class="btn btn-primary update-button" style="margin-top: 8px; display:none;">更新</button>
+            <p>
+            <!--
 			<ul>
 				<li style="display">Title:  <span id ="title"> ACM</span> </li>
 				<li style="display">Owner:  <span id ="owner" >xx</span>  </li>
 				<li style="display">Starttime <span > xxxx-xx-xx</span>   </li>
 				<li style="display">Deadline  <span id ="deadline"> xxxx-xx-xx</span> </li>
 				<li style="display">School  <span id ="school"> C </span> </li>
-			</ul>
+			</ul>-->
 		 </div>
 	</div>
 
@@ -22,7 +36,11 @@
             <h3 class="panel-title">project description</h3>
         </div>
         <div class="panel-body">
-        	<p>description:<span id="description"></span></p>
+        	<p>
+            <span id="description"></span>
+            <input type="text" class="form-control" placeholder="description" style="display:none;">
+            <button type="button" class="btn btn-primary update-button" style="margin-top: 8px; display:none;">更新</button>
+            </p>
         </div>
     </div>
 
@@ -30,8 +48,8 @@
         <div class="panel-heading">
             <h3 class="panel-title"></h3>
         </div>
-        <div class="panel-body">
-		<a href="www.baidu.com" class="btn btn-primary" role="button">createteam</a>
+        <div class="panel-body" id = "create_team">
+		<!--<buttom  class="btn btn-primary" role="button" id ="create_team">createteam</buttom>-->
 		</div>
 	</div>
 
@@ -42,11 +60,13 @@
           </div>
           <div class="panel-body">
            
-		  		<ul class = "list-group" id = "team">
+		  		<ul class = "list-group" id = "teams">
 		  			
 		  		</ul>
           </div>
     </div>
 </div>
+
+   <script type="text/javascript" src="/static/teamBuilder/js/project_detail.js"></script>
 {% endblock %}
 

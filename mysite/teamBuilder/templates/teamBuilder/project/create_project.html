@@ -4,19 +4,16 @@
 <div class="container">
 <div class="col-md-3"></div>
 <div class="col-md-6 ">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <input id="projectID" type="text" name="projectID" style="display:none;">
+       <form class="form-horizontal">
         <label for="projectname" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="projectname" placeholder="Title">
+          <input type="text" class="form-control" id="title" placeholder="Title">
         </div>
-      </div>
-
+<!--
       <div class="form-group">
         <label for="projectowner" class="col-sm-2 control-label">owner</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="projectowner" placeholder="Owner">
+          <input type="text" class="form-control" id="owner" placeholder="Owner">
         </div>
       </div>
 
@@ -33,55 +30,54 @@
           <input type="text" class="form-control" id="deadline" placeholder="xxxx-xx-xx">
         </div>
       </div>
+-->
 
-      <div class="form-group">
         <label for="school" class="col-sm-2 control-label">School</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="school" placeholder="xxxx-xx-xx">
+          <input type="text" class="form-control" id="school" placeholder="school">
         </div>
-      </div>
 
-      <div class="form-group">
         <label for="department" class="col-sm-2 control-label">department</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="department" placeholder="D">
         </div>
-      </div>
 
 
-      <div class="form-group">
-        <label for="major" class="col-sm-2 control-label">Major</label>
+       <label for="major" class="col-sm-2 control-label">Major</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="major" placeholder="xxxx-xx-xx">
+          <input type="text" class="form-control" id="major" placeholder="major">
         </div>
-      </div>
 
-      <div class="form-group">
         <label for="min_num" class="col-sm-2 control-label">min_num</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="min_num" placeholder="2">
         </div>
-      </div>
+  
 
-      <div class="form-group">
+     
         <label for="max_num" class="col-sm-2 control-label">max_num</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="max_num" placeholder="6">
         </div>
-      </div>
 
-      <div class="form-group">
-        <textarea type="description" name="description" class="form-control" rows="3" id="description" placeholder="project description"></textarea>
-      </div>
 
-      <div class="form-group">
+        <label for="description" class="col-sm-2 control-label">description</label>
+        <textarea type="description" name="description" class="form-control" rows="3"
+         id="description" placeholder="project description">
+         </textarea>
+  
+
+     
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">Publish</button>
-          <button type="cancel" class="btn btn-primary">Cancel</button>
+          <button  class="btn btn-primary" id="create_project">OK</button>
+          <button  class="btn btn-primary" >Cancel</button>
         </div>
-      </div>
-    </form>
+  </div>
+</form>
+
+
 </div>
 <div class="col-md-3"></div>
 </div>
+<script type="text/javascript" src="/static/teamBuilder/js/create_project.js"></script>
 {% endblock %}
