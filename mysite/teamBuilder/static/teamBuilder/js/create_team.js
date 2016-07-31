@@ -17,7 +17,7 @@ $('#create-team').click(function(e) {
             is_confirmed: false,
             is_special: false
         };
-    console.log(data);
+    // console.log(data);
     $.ajax({
     	url: '/api/teams/', 
     	success: function(result){    

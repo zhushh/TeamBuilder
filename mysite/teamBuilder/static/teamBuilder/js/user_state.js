@@ -5,6 +5,7 @@ if (window.sessionStorage.token) {
 	    id = window.sessionStorage.id;
 	$('.logined').append($('<li class="presentation"><a href="/teambuilder/user/' + id + '">' + msg + '</a></li>'));
 	$('.logined').append($('<li class="presentation logout"><a href="/teambuilder/logout">Logout</a></li>'));
+	$('.logined').append($('<li class="presentation"><a href="/teambuilder/project/create">Create Project</a></li>'));
 } else {
 	$('.logined').hide();
 }

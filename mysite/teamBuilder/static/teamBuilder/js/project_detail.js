@@ -32,7 +32,7 @@ $.get('/api/projects/' + projectID , function(result) {
     teamID = count; 
    console.log(teamID);
   var outer = $('#create_team');
-  $("<a href = \"" + '/teambuilder/project/createTeam/' + teamID + "\" class=\"btn btn-primary\" role = \"button\"> createTeam</a>").appendTo(outer);
+  $("<a href = \"" + '/teambuilder/project/createTeam/' + projectID + "\" class=\"btn btn-primary\" role = \"button\"> createTeam</a>").appendTo(outer);
 
     $('#owner').html(ownername);
 	});    
@@ -42,9 +42,11 @@ $.get('/api/projects/' + projectID , function(result) {
 	$('#description').html(result.description);
  
 	var outer = $("#teams");
-  console.log(result.team_enrolled);
-	for (team in result.team_enrolled) {
-    console.log(result.team_enrolled);
+  // console.log(result.team_enrolled);
+  // var team_enrolled = JSON.parse(result.team_enrolled);
+	for (team of result.team_enrolled) {
+    // console.log('team');
+    // console.log(team);
 		$.get(team, function(teamresult){
 			var name = teamresult.name;
 			var teamId = teamresult.url;

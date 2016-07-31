@@ -45,11 +45,13 @@ $.get("/api/users/" + userID, function(result){
     });
 });
 
-$(".info").click(function(e) {
-    $(this).css("display", "none");
-    $(this).siblings("input").css("display", "block");
-    $(this).siblings("button").css("display", "block");
-});
+if (sessionStorage.id == userID) {
+    $(".info").click(function(e) {
+        $(this).css("display", "none");
+        $(this).siblings("input").css("display", "block");
+        $(this).siblings("button").css("display", "block");
+    });
+}
 
 $(".update-button").click(function(e) {
     var key = $(this).siblings("span").attr("id");
